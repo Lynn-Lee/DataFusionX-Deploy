@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-config
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+data:
+  APP_VERSION: {{ .Values.global.version | quote }}
+  ENVIRONMENT: "production"
+  ACCESS_TOKEN_EXPIRES_MINUTES: {{ .Values.auth.accessTokenExpiresMinutes | quote }}
+  SSO_REDIRECT_URL: {{ .Values.auth.ssoRedirectUrl | quote }}
+  LDAP_ENABLED: {{ .Values.auth.ldap.enabled | quote }}
+  LDAP_SERVER_URI: {{ .Values.auth.ldap.serverUri | quote }}
+  LDAP_BIND_DN: {{ .Values.auth.ldap.bindDn | quote }}
+  LDAP_USER_SEARCH_BASE: {{ .Values.auth.ldap.userSearchBase | quote }}
+  LDAP_USER_FILTER: {{ .Values.auth.ldap.userFilter | quote }}
+  LDAP_ATTR_USERNAME: {{ .Values.auth.ldap.attrUsername | quote }}
+  LDAP_ATTR_EMAIL: {{ .Values.auth.ldap.attrEmail | quote }}
+  LDAP_ATTR_DISPLAY: {{ .Values.auth.ldap.attrDisplay | quote }}
+  LDAP_ATTR_EMPLOYEE_ID: {{ .Values.auth.ldap.attrEmployeeId | quote }}
+  LDAP_ATTR_DEPARTMENT: {{ .Values.auth.ldap.attrDepartment | quote }}
+  LDAP_ATTR_TITLE: {{ .Values.auth.ldap.attrTitle | quote }}
+  OIDC_ENABLED: {{ .Values.auth.oidc.enabled | quote }}
+  OIDC_ISSUER: {{ .Values.auth.oidc.issuer | quote }}
+  OIDC_DISCOVERY_URL: {{ .Values.auth.oidc.discoveryUrl | quote }}
+  OIDC_AUTHORIZATION_ENDPOINT: {{ .Values.auth.oidc.authorizationEndpoint | quote }}
+  OIDC_TOKEN_ENDPOINT: {{ .Values.auth.oidc.tokenEndpoint | quote }}
+  OIDC_USERINFO_ENDPOINT: {{ .Values.auth.oidc.userinfoEndpoint | quote }}
+  OIDC_JWKS_URI: {{ .Values.auth.oidc.jwksUri | quote }}
+  OIDC_CLIENT_ID: {{ .Values.auth.oidc.clientId | quote }}
+  OIDC_SCOPE: {{ .Values.auth.oidc.scope | quote }}
+  OIDC_USERNAME_CLAIM: {{ .Values.auth.oidc.usernameClaim | quote }}
+  OIDC_DISPLAY_NAME_CLAIM: {{ .Values.auth.oidc.displayNameClaim | quote }}
+  OIDC_EMAIL_CLAIM: {{ .Values.auth.oidc.emailClaim | quote }}
+  DINGTALK_LOGIN_ENABLED: {{ .Values.auth.dingtalk.enabled | quote }}
+  DINGTALK_LOGIN_APP_ID: {{ .Values.auth.dingtalk.appId | quote }}
+  FEISHU_LOGIN_ENABLED: {{ .Values.auth.feishu.enabled | quote }}
+  FEISHU_APP_ID: {{ .Values.auth.feishu.appId | quote }}
+  WECOM_LOGIN_ENABLED: {{ .Values.auth.wecom.enabled | quote }}
+  WECOM_LOGIN_CORP_ID: {{ .Values.auth.wecom.corpId | quote }}
+  WECOM_LOGIN_AGENT_ID: {{ .Values.auth.wecom.agentId | quote }}
+  CAS_ENABLED: {{ .Values.auth.cas.enabled | quote }}
+  CAS_SERVER_URL: {{ .Values.auth.cas.serverUrl | quote }}
+  CAS_USERNAME_ATTRIBUTE: {{ .Values.auth.cas.usernameAttribute | quote }}
+  LICENSE_REQUIRED: "true"
+  LICENSE_SERVER_URL: {{ .Values.license.serverUrl | quote }}
+  LICENSE_FILE_PATH: {{ .Values.license.filePath | quote }}
+  CDC_DDL_REALTIME_GUARD_ENABLED: {{ .Values.cdcGuard.realtimeEnabled | quote }}
+  CDC_DDL_GUARD_POLL_MS: {{ .Values.cdcGuard.pollMs | quote }}
+  CDC_DDL_GUARD_READY_TIMEOUT_SECONDS: {{ .Values.cdcGuard.readyTimeoutSeconds | quote }}
+  CDC_DDL_GUARD_LEASE_TTL_SECONDS: {{ .Values.cdcGuard.leaseTtlSeconds | quote }}
+  COMMERCIAL_INTEGRITY_REQUIRED: "true"
+  DATAFUSIONX_PUBLIC_URL: {{ .Values.global.publicUrl | quote }}

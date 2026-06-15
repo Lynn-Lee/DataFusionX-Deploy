@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+node_modules/
+dist/
+build/
+*.map
+*PRIVATE_KEY*
+*private_key*
+*license*.json
+*activation*

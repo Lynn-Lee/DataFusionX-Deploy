@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-backend
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: backend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: backend
+          image: {{ .Values.image.backend | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "datafusionx-commercial.fullname" . }}-config
+            - secretRef:
+                name: {{ include "datafusionx-commercial.fullname" . }}-secret
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "datafusionx-commercial.fullname" . }}-secret
+                  key: POSTGRES_PASSWORD
+            - name: DATABASE_URL
+              value: postgresql+asyncpg://datafusionx:$(POSTGRES_PASSWORD)@{{ include "datafusionx-commercial.fullname" . }}-postgres:5432/datafusionx
+            - name: REDIS_URL
+              value: redis://{{ include "datafusionx-commercial.fullname" . }}-redis:6379/0
+            - name: CORS_ORIGINS
+              value: {{ printf "[\"%s\"]" .Values.global.publicUrl | quote }}
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: licenses
+              mountPath: /app/licenses
+      volumes:
+        - name: licenses
+          persistentVolumeClaim:
+            claimName: {{ include "datafusionx-commercial.fullname" . }}-licenses
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-backend
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - port: {{ .Values.backend.service.port }}
+      targetPort: 8000

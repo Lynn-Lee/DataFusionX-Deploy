@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-postgres
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: postgres
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: postgres
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image | quote }}
+          env:
+            - name: POSTGRES_DB
+              value: datafusionx
+            - name: POSTGRES_USER
+              value: datafusionx
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "datafusionx-commercial.fullname" . }}-secret
+                  key: POSTGRES_PASSWORD
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: {{ include "datafusionx-commercial.fullname" . }}-postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-postgres
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/component: postgres
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - port: 5432
+      targetPort: 5432

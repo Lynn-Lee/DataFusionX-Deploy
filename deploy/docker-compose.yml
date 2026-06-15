@@ -1,0 +1,175 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: datafusionx
+      POSTGRES_USER: datafusionx
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    ports:
+      - "${POSTGRES_PORT:-15432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U datafusionx -d datafusionx"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-16379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ${DATAFUSIONX_BACKEND_IMAGE:-datafusionx-backend-commercial:${DATAFUSIONX_VERSION:-0.1.0}}
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      APP_VERSION: ${DATAFUSIONX_VERSION:-0.1.0}
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+asyncpg://datafusionx:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/datafusionx
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: '["${DATAFUSIONX_PUBLIC_URL:-http://localhost:8080}"]'
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      ENCRYPTION_SECRET_KEY: ${ENCRYPTION_SECRET_KEY:?ENCRYPTION_SECRET_KEY is required}
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD is required}
+      DEFAULT_ADMIN_DISPLAY_NAME: ${DEFAULT_ADMIN_DISPLAY_NAME:-管理员}
+      SSO_REDIRECT_URL: ${SSO_REDIRECT_URL:-http://localhost:8080/oauth/callback}
+      LICENSE_REQUIRED: "true"
+      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-https://license.loveai.asia}
+      LICENSE_PUBLIC_KEY: ${LICENSE_PUBLIC_KEY:?LICENSE_PUBLIC_KEY is required}
+      LICENSE_CUSTOMER_ID: ${LICENSE_CUSTOMER_ID:-}
+      LICENSE_DEPLOYMENT_ID: ${LICENSE_DEPLOYMENT_ID:?LICENSE_DEPLOYMENT_ID is required}
+      LICENSE_FILE_PATH: /app/licenses/datafusionx-license.json
+      CDC_DDL_REALTIME_GUARD_ENABLED: ${CDC_DDL_REALTIME_GUARD_ENABLED:-true}
+      CDC_DDL_GUARD_POLL_MS: ${CDC_DDL_GUARD_POLL_MS:-500}
+      CDC_DDL_GUARD_READY_TIMEOUT_SECONDS: ${CDC_DDL_GUARD_READY_TIMEOUT_SECONDS:-5}
+      CDC_DDL_GUARD_LEASE_TTL_SECONDS: ${CDC_DDL_GUARD_LEASE_TTL_SECONDS:-15}
+      COMMERCIAL_INTEGRITY_REQUIRED: "true"
+      COMMERCIAL_INTEGRITY_PUBLIC_KEY: ${COMMERCIAL_INTEGRITY_PUBLIC_KEY:?COMMERCIAL_INTEGRITY_PUBLIC_KEY is required}
+    ports:
+      - "${BACKEND_PORT:-18000}:8000"
+    volumes:
+      - licenses:/app/licenses
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery-worker:
+    image: ${DATAFUSIONX_BACKEND_IMAGE:-datafusionx-backend-commercial:${DATAFUSIONX_VERSION:-0.1.0}}
+    command: python -m celery -A app.worker.celery_app worker --loglevel=info
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      APP_VERSION: ${DATAFUSIONX_VERSION:-0.1.0}
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+asyncpg://datafusionx:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/datafusionx
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      ENCRYPTION_SECRET_KEY: ${ENCRYPTION_SECRET_KEY:?ENCRYPTION_SECRET_KEY is required}
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD is required}
+      DEFAULT_ADMIN_DISPLAY_NAME: ${DEFAULT_ADMIN_DISPLAY_NAME:-管理员}
+      LICENSE_REQUIRED: "true"
+      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-https://license.loveai.asia}
+      LICENSE_PUBLIC_KEY: ${LICENSE_PUBLIC_KEY:?LICENSE_PUBLIC_KEY is required}
+      LICENSE_CUSTOMER_ID: ${LICENSE_CUSTOMER_ID:-}
+      LICENSE_DEPLOYMENT_ID: ${LICENSE_DEPLOYMENT_ID:?LICENSE_DEPLOYMENT_ID is required}
+      LICENSE_FILE_PATH: /app/licenses/datafusionx-license.json
+      CDC_DDL_REALTIME_GUARD_ENABLED: ${CDC_DDL_REALTIME_GUARD_ENABLED:-true}
+      CDC_DDL_GUARD_POLL_MS: ${CDC_DDL_GUARD_POLL_MS:-500}
+      CDC_DDL_GUARD_READY_TIMEOUT_SECONDS: ${CDC_DDL_GUARD_READY_TIMEOUT_SECONDS:-5}
+      CDC_DDL_GUARD_LEASE_TTL_SECONDS: ${CDC_DDL_GUARD_LEASE_TTL_SECONDS:-15}
+      COMMERCIAL_INTEGRITY_REQUIRED: "true"
+      COMMERCIAL_INTEGRITY_PUBLIC_KEY: ${COMMERCIAL_INTEGRITY_PUBLIC_KEY:?COMMERCIAL_INTEGRITY_PUBLIC_KEY is required}
+    volumes:
+      - licenses:/app/licenses
+    depends_on:
+      - backend
+
+  celery-beat:
+    image: ${DATAFUSIONX_BACKEND_IMAGE:-datafusionx-backend-commercial:${DATAFUSIONX_VERSION:-0.1.0}}
+    command: python -m celery -A app.worker.celery_app beat --loglevel=info
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      APP_VERSION: ${DATAFUSIONX_VERSION:-0.1.0}
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+asyncpg://datafusionx:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/datafusionx
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      ENCRYPTION_SECRET_KEY: ${ENCRYPTION_SECRET_KEY:?ENCRYPTION_SECRET_KEY is required}
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD is required}
+      DEFAULT_ADMIN_DISPLAY_NAME: ${DEFAULT_ADMIN_DISPLAY_NAME:-管理员}
+      LICENSE_REQUIRED: "true"
+      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-https://license.loveai.asia}
+      LICENSE_PUBLIC_KEY: ${LICENSE_PUBLIC_KEY:?LICENSE_PUBLIC_KEY is required}
+      LICENSE_CUSTOMER_ID: ${LICENSE_CUSTOMER_ID:-}
+      LICENSE_DEPLOYMENT_ID: ${LICENSE_DEPLOYMENT_ID:?LICENSE_DEPLOYMENT_ID is required}
+      LICENSE_FILE_PATH: /app/licenses/datafusionx-license.json
+      CDC_DDL_REALTIME_GUARD_ENABLED: ${CDC_DDL_REALTIME_GUARD_ENABLED:-true}
+      CDC_DDL_GUARD_POLL_MS: ${CDC_DDL_GUARD_POLL_MS:-500}
+      CDC_DDL_GUARD_READY_TIMEOUT_SECONDS: ${CDC_DDL_GUARD_READY_TIMEOUT_SECONDS:-5}
+      CDC_DDL_GUARD_LEASE_TTL_SECONDS: ${CDC_DDL_GUARD_LEASE_TTL_SECONDS:-15}
+      COMMERCIAL_INTEGRITY_REQUIRED: "true"
+      COMMERCIAL_INTEGRITY_PUBLIC_KEY: ${COMMERCIAL_INTEGRITY_PUBLIC_KEY:?COMMERCIAL_INTEGRITY_PUBLIC_KEY is required}
+    volumes:
+      - licenses:/app/licenses
+    depends_on:
+      - backend
+
+  cdc-guard-worker:
+    image: ${DATAFUSIONX_BACKEND_IMAGE:-datafusionx-backend-commercial:${DATAFUSIONX_VERSION:-0.1.0}}
+    command: python -c "from app.worker.cdc_guard_worker import main; main()"
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      APP_VERSION: ${DATAFUSIONX_VERSION:-0.1.0}
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+asyncpg://datafusionx:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/datafusionx
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      ENCRYPTION_SECRET_KEY: ${ENCRYPTION_SECRET_KEY:?ENCRYPTION_SECRET_KEY is required}
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:?DEFAULT_ADMIN_PASSWORD is required}
+      DEFAULT_ADMIN_DISPLAY_NAME: ${DEFAULT_ADMIN_DISPLAY_NAME:-管理员}
+      LICENSE_REQUIRED: "true"
+      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-https://license.loveai.asia}
+      LICENSE_PUBLIC_KEY: ${LICENSE_PUBLIC_KEY:?LICENSE_PUBLIC_KEY is required}
+      LICENSE_CUSTOMER_ID: ${LICENSE_CUSTOMER_ID:-}
+      LICENSE_DEPLOYMENT_ID: ${LICENSE_DEPLOYMENT_ID:?LICENSE_DEPLOYMENT_ID is required}
+      LICENSE_FILE_PATH: /app/licenses/datafusionx-license.json
+      CDC_DDL_REALTIME_GUARD_ENABLED: ${CDC_DDL_REALTIME_GUARD_ENABLED:-true}
+      CDC_DDL_GUARD_POLL_MS: ${CDC_DDL_GUARD_POLL_MS:-500}
+      CDC_DDL_GUARD_READY_TIMEOUT_SECONDS: ${CDC_DDL_GUARD_READY_TIMEOUT_SECONDS:-5}
+      CDC_DDL_GUARD_LEASE_TTL_SECONDS: ${CDC_DDL_GUARD_LEASE_TTL_SECONDS:-15}
+      COMMERCIAL_INTEGRITY_REQUIRED: "true"
+      COMMERCIAL_INTEGRITY_PUBLIC_KEY: ${COMMERCIAL_INTEGRITY_PUBLIC_KEY:?COMMERCIAL_INTEGRITY_PUBLIC_KEY is required}
+    volumes:
+      - licenses:/app/licenses
+    depends_on:
+      - backend
+
+  frontend:
+    image: ${DATAFUSIONX_FRONTEND_IMAGE:-datafusionx-frontend-commercial:${DATAFUSIONX_VERSION:-0.1.0}}
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
+  licenses:

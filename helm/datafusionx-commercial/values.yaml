@@ -1,0 +1,108 @@
+global:
+  version: "0.1.0-deploy-smoke"
+  publicUrl: "http://datafusionx.example.com"
+
+image:
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+secrets:
+  postgresPassword: "change-me"
+  jwtSecretKey: "change-me-at-least-32-bytes"
+  encryptionSecretKey: "change-me-at-least-32-bytes"
+  licensePublicKey: ""
+  licenseCustomerId: ""
+  licenseDeploymentId: "change-me-stable-deployment-id"
+  commercialIntegrityPublicKey: "7sE7Bn3CJGIAd-CCDpeX-05wjTFsaS4kbM3vKU0tWNM"
+  ldapBindPassword: ""
+  oidcClientSecret: ""
+  dingtalkAppSecret: ""
+  feishuAppSecret: ""
+  wecomAppSecret: ""
+
+auth:
+  accessTokenExpiresMinutes: 480
+  ssoRedirectUrl: "http://datafusionx.example.com/oauth/callback"
+  ldap:
+    enabled: "false"
+    serverUri: ""
+    bindDn: ""
+    userSearchBase: ""
+    userFilter: "(uid=%(user)s)"
+    attrUsername: "uid"
+    attrEmail: "mail"
+    attrDisplay: "cn"
+    attrEmployeeId: "employeeId"
+    attrDepartment: "department"
+    attrTitle: "title"
+  oidc:
+    enabled: "false"
+    issuer: ""
+    discoveryUrl: ""
+    authorizationEndpoint: ""
+    tokenEndpoint: ""
+    userinfoEndpoint: ""
+    jwksUri: ""
+    clientId: ""
+    scope: "openid profile email"
+    usernameClaim: "preferred_username"
+    displayNameClaim: "name"
+    emailClaim: "email"
+  dingtalk:
+    enabled: "false"
+    appId: ""
+  feishu:
+    enabled: "false"
+    appId: ""
+  wecom:
+    enabled: "false"
+    corpId: ""
+    agentId: ""
+  cas:
+    enabled: "false"
+    serverUrl: ""
+    usernameAttribute: "user"
+
+license:
+  serverUrl: "https://license.loveai.asia"
+  filePath: "/app/licenses/datafusionx-license.json"
+
+postgres:
+  image: "postgres:16"
+  storage: "20Gi"
+
+redis:
+  image: "redis:7-alpine"
+
+backend:
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 8000
+
+frontend:
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
+
+worker:
+  replicas: 1
+
+beat:
+  replicas: 1
+
+cdcGuard:
+  replicas: 1
+  realtimeEnabled: "true"
+  pollMs: "500"
+  readyTimeoutSeconds: "5"
+  leaseTtlSeconds: "15"
+
+ingress:
+  enabled: false
+  className: ""
+  host: "datafusionx.example.com"
+  tlsSecretName: ""

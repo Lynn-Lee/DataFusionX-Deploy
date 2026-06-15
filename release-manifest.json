@@ -1,0 +1,159 @@
+{
+  "algorithm": "sha256",
+  "edition": "enterprise",
+  "files": [
+    {
+      "path": ".env.example",
+      "sha256": "1e74784f06edbc397675bce51f82f72c8f1f1961036338ece8d738487c9c9e1a",
+      "size": 1357
+    },
+    {
+      "path": "COMMERCIAL_DEPLOYMENT.md",
+      "sha256": "153dfbedcaf06f9512d132d97ab288c9ed5bdbcf3a4e43c6a72c459bf881f66f",
+      "size": 21791
+    },
+    {
+      "path": "CUSTOMER_DELIVERY_CHECKLIST.md",
+      "sha256": "9f2d8ccccdafa25db5d8496f7b10b4222ba061f0b89c980c36ab1cf7374ab5f0",
+      "size": 2015
+    },
+    {
+      "path": "INSTALLATION.md",
+      "sha256": "4a480209394d24f1a15c26e52f2d7719686fef52c8d46a1e52ce4433b8cc0532",
+      "size": 4286
+    },
+    {
+      "path": "LEGAL-NOTICE.md",
+      "sha256": "bab4442e233630434c3b640d94a63cbfc148dc327c026dc04457509fd982ee4c",
+      "size": 1716
+    },
+    {
+      "path": "OPERATIONS_UPGRADE.md",
+      "sha256": "d5d4df26b9dba3a5ee079cc53e3cd67ee66f19fad27510944b621c7ce730db84",
+      "size": 3154
+    },
+    {
+      "path": "README.md",
+      "sha256": "cdd4557cc47533e07f03e117b4e044e95ce957cf9445c4035ce8021cceaccbae",
+      "size": 2819
+    },
+    {
+      "path": "USER_GUIDE.md",
+      "sha256": "1d0a45f38942776732f3f12515a4c85f9fd46953b6453cd4d82435969597ad99",
+      "size": 4131
+    },
+    {
+      "path": "checksums.txt",
+      "sha256": "1680190487c943d76b72a040fe7da070bd42b26a5cb09cc038cce0dc1a8792e8",
+      "size": 2809
+    },
+    {
+      "path": "deploy/docker-compose.yml",
+      "sha256": "05ae51952ed56b30c3e4dedc44e96838af545927625e733184b831dacf4a1aaa",
+      "size": 8458
+    },
+    {
+      "path": "helm/datafusionx-commercial/Chart.yaml",
+      "sha256": "4ad4b1bdc7abb10716caee602e88244d11a4884b00afa6f1fae59c06cf1cbacd",
+      "size": 194
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/_helpers.tpl",
+      "sha256": "4941d89a856eaf63dcaaf619172c377df7f6f18938684d1caecf5c147c3a48f8",
+      "size": 526
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/backend.yaml",
+      "sha256": "e40e805dc7a9a430e28bfa7ca01d1f63a2b0cdcdc669c8ea31112801eecb87d0",
+      "size": 2380
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/configmap.yaml",
+      "sha256": "a768660147c101ecfec9c547ade583aca87dcd21979de6475c68b667c43ec03d",
+      "size": 3110
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/frontend.yaml",
+      "sha256": "503a583f21af1cccf9c556fdd4bace17788d956fc254b09e7b26d4c45188c92c",
+      "size": 1141
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/ingress.yaml",
+      "sha256": "2e885b497dd9102a5b0141062205b22d4cd02ee36382985e9733f5a9c51ba526",
+      "size": 1134
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/postgres.yaml",
+      "sha256": "bbf7b471e8b4d21d4c37588bd4e4dff1db160e30c0bce9a1d9e8a200fc59a8e8",
+      "size": 1612
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/pvc.yaml",
+      "sha256": "1ac235d99b8df45a8f807d18b004115159cffeb576c4f90927d384342a67ba96",
+      "size": 603
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/redis.yaml",
+      "sha256": "dbc838e0c0ad1b598f0061ae9d14485f45812ccdb9e78a80550028b8779f1c25",
+      "size": 961
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/secret.yaml",
+      "sha256": "e2cad46b66212182498ae7c649f28f18d714a6bc55dcd4b4f498f7c8ca48590f",
+      "size": 1069
+    },
+    {
+      "path": "helm/datafusionx-commercial/templates/worker.yaml",
+      "sha256": "92703e0ff15eebe1933bffb6deba8e17681447892177f2de971aa7309d0fc5a9",
+      "size": 5339
+    },
+    {
+      "path": "helm/datafusionx-commercial/values.yaml",
+      "sha256": "ff042d88878371d1d66d585bf37c913448d9162eed0757d5a821084c098eafcd",
+      "size": 2216
+    },
+    {
+      "path": "nginx/datafusionx-commercial.conf",
+      "sha256": "940f24c1b2f141cf1e64c7473c0bebed7049b4b26634ee1ecfc132616f1a46ba",
+      "size": 670
+    },
+    {
+      "path": "preflight-upgrade.sh",
+      "sha256": "a292e12b53c673950a3f423384729abc9d0f800360307c0676280be748fc5f5c",
+      "size": 12510
+    },
+    {
+      "path": "rollback.sh",
+      "sha256": "9e6241dab0ea0161ea5a5fb387aaf4b23af5ba96aaaa38882b759535a61e3208",
+      "size": 3749
+    },
+    {
+      "path": "screenshots/README.md",
+      "sha256": "17a2d6521f1d5e7bb96aeff42405541f65f48692f97b14c8f0c782fc5d3099d3",
+      "size": 307
+    },
+    {
+      "path": "tools/commercial-manifest.py",
+      "sha256": "3603c392dc08168dc2f48f989abb919a5944815270d5b367fba7e7de637246be",
+      "size": 5995
+    },
+    {
+      "path": "upgrade.sh",
+      "sha256": "ac16a9ee940f32a35fb1e507dd6c3f56450d5b8b887ad34c87cf2db55726df8a",
+      "size": 2810
+    },
+    {
+      "path": "verify-license.sh",
+      "sha256": "a8c5e6e141aa940f2ed160cad5c3b29956ff7d076080743a792ba7ea47e23456",
+      "size": 2866
+    }
+  ],
+  "generated_at": "2026-06-15T08:19:51.067435+00:00",
+  "images": [
+    "ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke",
+    "ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke"
+  ],
+  "product": "datafusionx",
+  "schema": 1,
+  "version": "0.1.0-deploy-smoke"
+}

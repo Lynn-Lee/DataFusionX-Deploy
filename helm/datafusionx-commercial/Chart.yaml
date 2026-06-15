@@ -1,0 +1,6 @@
+apiVersion: v2
+name: datafusionx-commercial
+description: DataFusionX Enterprise commercial private deployment chart.
+type: application
+version: 0.1.0-deploy-smoke
+appVersion: 0.1.0-deploy-smoke
