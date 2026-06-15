@@ -1,21 +1,31 @@
-# DataFusionX Enterprise Legal Notice
+# DataFusionX Enterprise 使用授权
 
-DataFusionX Enterprise is commercial software distributed under a customer-specific license agreement. The deployment package is intended only for the licensed customer environment and delivery batch identified by the signed release manifest.
+DataFusionX Enterprise 是商业软件。本公开部署仓库用于下载部署包、查看部署文档和在客户环境中完成试用或正式部署；公开下载、公开镜像拉取或试用部署不代表授予源码使用权、修改权、再分发权或长期商业生产授权。
 
-## Usage Boundary
+## 试用授权
 
-- The package may be used only with a valid DataFusionX Enterprise commercial License.
-- The package must not be redistributed, republished, reverse engineered, decompiled, or used to reconstruct DataFusionX Enterprise source code except where applicable law explicitly permits.
-- The package does not include source code, private signing keys, customer activation credentials, or customer-specific License files.
-- Public release artifacts are deployment entrypoints only. Customer identity, entitlement, activation code, and deployment fingerprint are controlled by License-Server-Center.
+部署完成后，DataFusionX Enterprise 支持试用授权。试用期内可以完整体验产品能力，包括项目治理、连接管理、CDC / Batch 同步、SQL 作业、审批、调度、运行中心、诊断中心、DDL 卫士、告警、审计和系统健康等功能。
 
-## Customer Responsibilities
+试用期结束后，如仍希望继续使用，或希望扩大到更多用户、更多实例、长期生产环境、离线环境或正式商业场景，请联系作者 Lynn-Lee 获取继续使用授权。
 
-- Keep `.env`, License files, activation codes, deployment fingerprints, tokens, private keys, and database credentials out of public tickets, public repositories, chat groups, and diagnostic bundles.
-- Use fixed image tags and signed release manifests when deploying or upgrading.
-- Back up the metadata PostgreSQL database and License volume before upgrade or rollback.
-- Confirm that DataFusionX Enterprise is used as a control plane only. External Kafka topics, CDC connectors, Flink clusters, StarRocks tables, and relational target tables remain customer-managed resources.
+## 正式授权
 
-## Support Materials
+正式授权通常绑定客户 ID、部署 ID、版本范围、功能模块、额度和有效期。DataFusionX Enterprise 支持在线激活、联网刷新和离线授权导入。长期离线环境请提前规划离线授权流程。
 
-The package includes operational scripts and examples for deployment convenience. These materials do not expand the licensed usage scope and do not replace the signed commercial agreement.
+授权材料、激活码、离线 License、部署指纹和客户凭据不包含在公开仓库中，也不应提交到公开工单、公开仓库或聊天群。
+
+## 使用限制
+
+除非另有书面授权，不得：
+
+- 逆向工程、反编译、反汇编、绕过授权校验或移除完整性校验。
+- 复制、出租、转让、托管、二次销售或二次分发 DataFusionX Enterprise 商业部署包。
+- 使用非授权方式扩展功能、额度、版本或有效期。
+- 将部署包用于授权客户、授权部署 ID、授权环境或授权期限之外的场景。
+
+## 客户责任
+
+- 妥善保管 `.env`、License 文件、激活码、Token、私钥、部署指纹和数据库凭据。
+- 使用固定版本镜像和 signed release manifest 部署或升级。
+- 升级和回滚前备份元数据库和 License volume。
+- 确认 DataFusionX Enterprise 仅作为控制面使用，外部 Kafka Topic、CDC Connector、Flink 集群、StarRocks 表和关系型目标表仍由客户侧管理。
