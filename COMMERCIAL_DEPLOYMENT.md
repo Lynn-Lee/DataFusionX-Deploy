@@ -72,7 +72,7 @@ images/
 - Docker Engine + Docker Compose v2，或 Kubernetes + Helm 3。
 - 可访问固定版本镜像，或已导入离线镜像 tar。
 - 可用端口：默认前端 `8080`，后端 `18000`，PostgreSQL `15432`，Redis `16379`。
-- 稳定访问域名或内网地址。
+- 稳定访问域名或内网地址，并将 `DATAFUSIONX_PUBLIC_URL` 配置为用户浏览器实际访问地址。
 - 生产随机密钥：`POSTGRES_PASSWORD`、`JWT_SECRET_KEY`、`ENCRYPTION_SECRET_KEY`、管理员初始密码。
 - 使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
 - 外部 Kafka、Flink SQL Gateway、源端、目标端、目标表和数据库授权。
@@ -90,9 +90,10 @@ cd DataFusionX-Deploy
 cp .env.example .env
 ```
 
-编辑 `.env`，至少替换：
+编辑 `.env`，至少检查并填妥：
 
 ```text
+DATAFUSIONX_PUBLIC_URL
 POSTGRES_PASSWORD
 JWT_SECRET_KEY
 ENCRYPTION_SECRET_KEY
@@ -102,6 +103,14 @@ LICENSE_CUSTOMER_ID
 LICENSE_DEPLOYMENT_ID
 COMMERCIAL_INTEGRITY_PUBLIC_KEY
 ```
+
+启动前确认没有遗留占位值：
+
+```bash
+grep -nE 'change-me|^LICENSE_PUBLIC_KEY=$|^LICENSE_CUSTOMER_ID=$|^COMMERCIAL_INTEGRITY_PUBLIC_KEY=$' .env
+```
+
+预期结果是没有输出。只要还有输出，就继续编辑 `.env`。
 
 渲染并启动：
 
@@ -126,19 +135,38 @@ http://localhost:8080
 
 ## 6. Helm 部署流程
 
-Kubernetes 环境可使用随包 Helm Chart：
+Kubernetes 环境可使用随包 Helm Chart。生产环境建议先复制 values 文件，再通过文件部署，避免把密码、Token 或授权配置写进命令历史：
 
 ```bash
-helm upgrade --install datafusionx ./helm/datafusionx-commercial \
-  --set global.version=<version> \
-  --set image.backend=<backend-image> \
-  --set image.frontend=<frontend-image> \
-  --set global.publicUrl=https://datafusionx.example.com \
-  --set secrets.postgresPassword='<数据库密码>' \
-  --set secrets.jwtSecretKey='<至少 32 位 JWT 密钥>' \
-  --set secrets.encryptionSecretKey='<至少 32 位加密密钥>' \
-  --set secrets.licensePublicKey='<使用授权公钥>' \
-  --set secrets.licenseDeploymentId='<稳定部署 ID>'
+cp helm/datafusionx-commercial/values.yaml values-prod.yaml
+```
+
+至少修改 `values-prod.yaml` 中的版本、访问地址、镜像和 `secrets`：
+
+```yaml
+global:
+  version: "<version>"
+  publicUrl: "https://datafusionx.example.com"
+image:
+  backend: "<backend-image>"
+  frontend: "<frontend-image>"
+secrets:
+  postgresPassword: "<数据库密码>"
+  jwtSecretKey: "<至少 32 字节 JWT 密钥>"
+  encryptionSecretKey: "<至少 32 字节加密密钥>"
+  licensePublicKey: "<使用授权公钥>"
+  licenseCustomerId: "<客户 ID>"
+  licenseDeploymentId: "<稳定部署 ID>"
+  commercialIntegrityPublicKey: "<商业发布包验签公钥>"
+auth:
+  ssoRedirectUrl: "https://datafusionx.example.com/oauth/callback"
+```
+
+部署前先渲染检查：
+
+```bash
+helm template datafusionx ./helm/datafusionx-commercial -f values-prod.yaml >/tmp/datafusionx-rendered.yaml
+helm upgrade --install datafusionx ./helm/datafusionx-commercial -f values-prod.yaml
 ```
 
 生产环境建议接入客户已有 Secret、Ingress、存储、镜像仓库、日志采集和监控系统。Chart 默认提供 PostgreSQL、Redis、Backend、Frontend、Celery Worker、Celery Beat 和授权文件 PVC；如使用托管 PostgreSQL / Redis，可基于 values 调整。
@@ -198,6 +226,7 @@ python tools/commercial-manifest.py verify-release \
 - 已准备 Docker Compose 或 Kubernetes / Helm 环境。
 - 已确认服务器可以拉取固定版本镜像，或已导入离线镜像。
 - 已复制 `.env.example` 为 `.env` 并替换所有 `change-me` 值。
+- 已确认 `DATAFUSIONX_PUBLIC_URL` 与用户浏览器实际访问地址一致。
 - 已准备使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
 - 已确认 `.env`、授权文件、激活码、Token、私钥、部署指纹和数据库连接串不会进入公开材料。
 
@@ -243,7 +272,7 @@ python tools/commercial-manifest.py verify-release \
 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upgrade.sh
 ```
 
-脚本会检查固定版本镜像、关键环境变量、Compose 配置、商业 release manifest、PostgreSQL 元数据库备份、授权数据卷备份、运行中任务、健康检查和授权状态。
+脚本会检查固定版本镜像、关键环境变量、Compose 配置、商业 release manifest、PostgreSQL 元数据库备份、授权数据卷备份、运行中任务、Alembic 当前版本、健康检查和授权状态。检查通过后会输出 `backups/preflight-<时间戳>/` 备份目录。
 
 升级：
 
@@ -260,6 +289,8 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 ```
 
 `backups/preflight-<时间戳>/env.full.local`、`env.rollback.local`、`metadata.dump` 和 `licenses.tgz` 是敏感回滚材料，不得进入工单、公开聊天、公开仓库或交付包。对外排查只共享 `env.redacted`、`compose.rendered.yml`、`health.json`、`license-status.json` 和 `preflight-summary.txt`。
+
+如果管理员首次登录后已改密，所有脚本中的 `<管理员密码>` 都应使用当前有效密码；如果管理员账号不是默认 `admin`，同时传入 `DEFAULT_ADMIN_USERNAME='<管理员账号>'`。
 
 ## 12. 安全边界
 

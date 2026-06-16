@@ -4,48 +4,43 @@
   "files": [
     {
       "path": ".env.example",
-      "sha256": "1e74784f06edbc397675bce51f82f72c8f1f1961036338ece8d738487c9c9e1a",
-      "size": 1357
+      "sha256": "22be621423a0928b5c6eb25bc42a58b593f10bb8a98eabd03b536c68eaeb677c",
+      "size": 1432
     },
     {
       "path": "COMMERCIAL_DEPLOYMENT.md",
-      "sha256": "153dfbedcaf06f9512d132d97ab288c9ed5bdbcf3a4e43c6a72c459bf881f66f",
-      "size": 21791
-    },
-    {
-      "path": "CUSTOMER_DELIVERY_CHECKLIST.md",
-      "sha256": "9f2d8ccccdafa25db5d8496f7b10b4222ba061f0b89c980c36ab1cf7374ab5f0",
-      "size": 2015
+      "sha256": "b8431d826f545a2a3c43d0d36cc779b0dd5b31851adf6667b864be8e956a0138",
+      "size": 12854
     },
     {
       "path": "INSTALLATION.md",
-      "sha256": "4a480209394d24f1a15c26e52f2d7719686fef52c8d46a1e52ce4433b8cc0532",
-      "size": 4286
+      "sha256": "83bb158aecce7885ed064425a8c5e1328f0e134a5cb187552a351846de909e49",
+      "size": 14200
     },
     {
       "path": "LEGAL-NOTICE.md",
-      "sha256": "bab4442e233630434c3b640d94a63cbfc148dc327c026dc04457509fd982ee4c",
-      "size": 1716
+      "sha256": "c4abdc32ed2da8a4918a0ad17cfb8597c09c8c0fcf8ca02bb9c5cd4d6b0997f7",
+      "size": 2091
     },
     {
       "path": "OPERATIONS_UPGRADE.md",
-      "sha256": "d5d4df26b9dba3a5ee079cc53e3cd67ee66f19fad27510944b621c7ce730db84",
-      "size": 3154
+      "sha256": "1de282e87ef97bc231cdbbcbbc019553d8fa84f2f55e2e9ac43814d3c517340d",
+      "size": 11570
     },
     {
       "path": "README.md",
-      "sha256": "cdd4557cc47533e07f03e117b4e044e95ce957cf9445c4035ce8021cceaccbae",
-      "size": 2819
+      "sha256": "581a300d13cd3ced5d4499762ef2a610e76d599e7959db715d033263a0f8ed6c",
+      "size": 5704
     },
     {
       "path": "USER_GUIDE.md",
-      "sha256": "1d0a45f38942776732f3f12515a4c85f9fd46953b6453cd4d82435969597ad99",
-      "size": 4131
+      "sha256": "2429260a0ba83003ea655269de6c3698e540c10d24a03f2072cebb007fd53e43",
+      "size": 13101
     },
     {
       "path": "checksums.txt",
-      "sha256": "1680190487c943d76b72a040fe7da070bd42b26a5cb09cc038cce0dc1a8792e8",
-      "size": 2809
+      "sha256": "367a5962121e4422644ee8c863bc411ccb1c914f689fc6d43c68a732489b4d1c",
+      "size": 4391
     },
     {
       "path": "deploy/docker-compose.yml",
@@ -129,8 +124,93 @@
     },
     {
       "path": "screenshots/README.md",
-      "sha256": "17a2d6521f1d5e7bb96aeff42405541f65f48692f97b14c8f0c782fc5d3099d3",
-      "size": 307
+      "sha256": "e0d79de5cefd92d1bdb604cad559a14ebbb543672155b89355cf9874186c4f62",
+      "size": 1045
+    },
+    {
+      "path": "screenshots/alerts.png",
+      "sha256": "a00e7cc882cd0a24199779821f6fc3436044d7a070128c90c9c8d0df967591c1",
+      "size": 836369
+    },
+    {
+      "path": "screenshots/audit-log.png",
+      "sha256": "029a5d9f14e9c26a6d816caedd5e21b66db08d0fc549ccda5a48e99611e1c7eb",
+      "size": 770365
+    },
+    {
+      "path": "screenshots/compatibility-matrix.png",
+      "sha256": "3095cc2f19beae78764425aed5bc33cfd30381f477d33b4c435060569183b9fb",
+      "size": 746396
+    },
+    {
+      "path": "screenshots/connections.png",
+      "sha256": "803906dc3dfd5f0517b938bafad5300a050fcd514d4a77f30a53800de699faf4",
+      "size": 709683
+    },
+    {
+      "path": "screenshots/dashboard-overview.png",
+      "sha256": "0fa0a9d68ec9c2b6195ac6c0946fca6571d82660057aa68df100c867bd6acce9",
+      "size": 678106
+    },
+    {
+      "path": "screenshots/dashboard-trends.png",
+      "sha256": "338b3178519ccbe2e807b17e2f58aee0a131eb3728a0b60b986f83994ccf1309",
+      "size": 419680
+    },
+    {
+      "path": "screenshots/ddl-guard.png",
+      "sha256": "5b18fd1cd3dbf32d77b09e04af848505e1c93cd7a1557a7fba53fe7ac37667ab",
+      "size": 525911
+    },
+    {
+      "path": "screenshots/diagnostics-actions.png",
+      "sha256": "872131e1fc3ed4cb2e65341b6eae38b1014fba6d95a256aeaa74d9e7ba4e1bcf",
+      "size": 574084
+    },
+    {
+      "path": "screenshots/diagnostics-overview.png",
+      "sha256": "bc924fab88feca1e825659b7d17b9b6319de2d5efb01080d6e84f4c95df60df5",
+      "size": 540881
+    },
+    {
+      "path": "screenshots/project-management.png",
+      "sha256": "e91aaeb6a6526be88ffec835cd90255385425d679da624c72d5bd13add3c3ed9",
+      "size": 715252
+    },
+    {
+      "path": "screenshots/run-center.png",
+      "sha256": "5c031b7c64525b137f198dbc7c8f76c6afb1d3d8fab3130bb73bdbe2ddcc2c89",
+      "size": 699323
+    },
+    {
+      "path": "screenshots/schedule-view.png",
+      "sha256": "2e664faaaa4cc392418c3ecfafebfaaf8b8086011e08bf58c6b35d727fa31f7f",
+      "size": 625096
+    },
+    {
+      "path": "screenshots/sql-jobs.png",
+      "sha256": "d2d399e127da6e8839f1dcad59a1d47843bbea7afb31922f8b3debd56db98112",
+      "size": 621839
+    },
+    {
+      "path": "screenshots/sync-jobs.png",
+      "sha256": "9a504f43d9a158364ce08bc112a5dc82032d0229f3939e3355b8afb1782bea57",
+      "size": 714930
+    },
+    {
+      "path": "screenshots/system-config.png",
+      "sha256": "fcc92acc10bb30563b2ecc5f86a61162be7c6821aa4e361663687b10dcf30464",
+      "size": 511682
+    },
+    {
+      "path": "screenshots/system-health-license.png",
+      "sha256": "52cbe9ab173396fed3670f1f0a6afc8d493248426dca4b919e4d5f70206be555",
+      "size": 602348
+    },
+    {
+      "path": "screenshots/user-permissions.png",
+      "sha256": "fe33fc14d448cc768300bd60567af5b4d2fcbc850ff9030b0bede14e421a4a32",
+      "size": 799485
     },
     {
       "path": "tools/commercial-manifest.py",
@@ -148,7 +228,7 @@
       "size": 2866
     }
   ],
-  "generated_at": "2026-06-15T08:19:51.067435+00:00",
+  "generated_at": "2026-06-16T02:48:06.293140+00:00",
   "images": [
     "ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke",
     "ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke"

@@ -1,6 +1,6 @@
 # DataFusionX Enterprise
 
-DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是面向用户下载和部署使用的公开仓库，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和测试环境截图。
+DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是用户下载、部署和升级 DataFusionX Enterprise 的公开入口，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和功能截图。
 
 当前发布版本：`0.1.0-deploy-smoke`
 
@@ -22,7 +22,9 @@ DataFusionX Enterprise 聚焦企业数据同步“控制面”：把连接管理
 - 诊断中心：聚合失败分类、稳定性趋势、容量风险和待闭环动作，辅助运维排障和投产复核。
 - 平台治理：系统健康、系统配置、兼容矩阵、告警通知、商业授权和升级回滚工具链。
 
-## 快速部署
+## 最短部署路径
+
+适合 Docker Compose 单节点试用、PoC 或小规模生产。正式生产部署前请完整阅读 [安装部署指南](INSTALLATION.md)。
 
 ```bash
 git clone https://github.com/Lynn-Lee/DataFusionX-Deploy.git
@@ -30,7 +32,33 @@ cd DataFusionX-Deploy
 cp .env.example .env
 ```
 
-编辑 `.env`，至少替换所有 `change-me` 值，并设置数据库密码、JWT 密钥、加密密钥、管理员初始密码、使用授权公钥、客户 ID 和稳定部署 ID。
+编辑 `.env`，至少检查并填妥以下字段：
+
+```text
+POSTGRES_PASSWORD
+JWT_SECRET_KEY
+ENCRYPTION_SECRET_KEY
+DEFAULT_ADMIN_PASSWORD
+LICENSE_PUBLIC_KEY
+LICENSE_CUSTOMER_ID
+LICENSE_DEPLOYMENT_ID
+COMMERCIAL_INTEGRITY_PUBLIC_KEY
+DATAFUSIONX_PUBLIC_URL
+```
+
+可用下面命令快速生成密钥值：
+
+```bash
+openssl rand -base64 32
+```
+
+启动前确认没有遗留占位值：
+
+```bash
+grep -nE 'change-me|^LICENSE_PUBLIC_KEY=$|^LICENSE_CUSTOMER_ID=$|^COMMERCIAL_INTEGRITY_PUBLIC_KEY=$' .env
+```
+
+上面命令没有输出，才继续启动：
 
 ```bash
 docker compose -f deploy/docker-compose.yml --env-file .env config --quiet
@@ -45,7 +73,15 @@ curl -fsS http://localhost:18000/api/v1/health
 - 控制台：`http://localhost:8080`
 - 后端健康检查：`http://localhost:18000/api/v1/health`
 
-Kubernetes / Helm、离线包、升级和回滚步骤见下方文档入口。
+如果部署在服务器上，请把 `localhost` 替换成服务器内网地址、域名或反向代理地址，并确保 `.env` 中的 `DATAFUSIONX_PUBLIC_URL` 与用户浏览器实际访问地址一致。
+
+## 文档入口
+
+- [安装部署指南](INSTALLATION.md)：从环境准备、`.env` 配置、Docker Compose / Helm 部署到首次登录验证。
+- [产品使用手册](USER_GUIDE.md)：从系统初始化到项目、连接、任务、审批、调度、运行中心和投产检查。
+- [运维升级指南](OPERATIONS_UPGRADE.md)：日常巡检、日志、备份、升级、回滚和故障排查。
+- [私有化部署方案](COMMERCIAL_DEPLOYMENT.md)：部署形态、交付内容、上线检查和安全边界。
+- [使用授权](LEGAL-NOTICE.md)：试用和继续使用授权说明。
 
 ## 核心功能截图
 
@@ -80,14 +116,6 @@ Kubernetes / Helm、离线包、升级和回滚步骤见下方文档入口。
 ### 调度视图
 
 ![调度视图](screenshots/schedule-view.png)
-
-## 文档入口
-
-- [安装部署指南](INSTALLATION.md)
-- [产品使用手册](USER_GUIDE.md)
-- [运维升级指南](OPERATIONS_UPGRADE.md)
-- [私有化部署方案](COMMERCIAL_DEPLOYMENT.md)
-- [使用授权](LEGAL-NOTICE.md)
 
 ## 发布包校验
 

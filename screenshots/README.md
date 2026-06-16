@@ -1,6 +1,6 @@
 # Screenshots
 
-本目录存放 DataFusionX Enterprise 测试环境截图，用于公开 README、产品使用手册和客户培训材料。
+本目录存放 DataFusionX Enterprise 功能截图，用于公开 README、产品使用手册和客户培训材料。
 
 ## 文件说明
 
