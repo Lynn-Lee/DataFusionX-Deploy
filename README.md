@@ -1,6 +1,6 @@
 # DataFusionX Enterprise
 
-DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是面向用户下载和部署使用的公开仓库，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和测试环境截图，不包含私有源码、客户 License、激活码或现场凭据。
+DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是面向用户下载和部署使用的公开仓库，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和测试环境截图。
 
 当前发布版本：`0.1.0-deploy-smoke`
 
@@ -30,7 +30,7 @@ cd DataFusionX-Deploy
 cp .env.example .env
 ```
 
-编辑 `.env`，至少替换所有 `change-me` 值，并设置数据库密码、JWT 密钥、加密密钥、管理员初始密码、License 公钥、客户 ID 和稳定部署 ID。
+编辑 `.env`，至少替换所有 `change-me` 值，并设置数据库密码、JWT 密钥、加密密钥、管理员初始密码、使用授权公钥、客户 ID 和稳定部署 ID。
 
 ```bash
 docker compose -f deploy/docker-compose.yml --env-file .env config --quiet
@@ -86,6 +86,7 @@ Kubernetes / Helm、离线包、升级和回滚步骤见下方文档入口。
 - [安装部署指南](INSTALLATION.md)
 - [产品使用手册](USER_GUIDE.md)
 - [运维升级指南](OPERATIONS_UPGRADE.md)
+- [私有化部署方案](COMMERCIAL_DEPLOYMENT.md)
 - [使用授权](LEGAL-NOTICE.md)
 
 ## 发布包校验
@@ -104,7 +105,3 @@ shasum -a 256 -c releases/v0.1.0-deploy-smoke/DataFusionX-Enterprise-v0.1.0-depl
 - 前端：`ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke`
 
 生产环境不要使用 `latest`，请保留 `.env.example`、Docker Compose 和 Helm values 中的明确版本标签。
-
-## 安全提醒
-
-不要把 `.env`、License 文件、激活码、Token、私钥、部署指纹、数据库连接串或现场拓扑提交到公开仓库、公开工单或聊天群。共享日志、截图、诊断包和排查材料前请先脱敏。

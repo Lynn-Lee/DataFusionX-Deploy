@@ -2,7 +2,7 @@
 
 > 文档状态：L1 商业私有化部署方案。本文面向客户、实施和运维团队，说明 DataFusionX Enterprise 在企业内网、测试环境、预生产和生产环境中的推荐部署方式、交付内容、上线检查和运维边界。
 
-DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的数据同步控制台。私有化部署包只包含固定版本商业镜像引用、Docker Compose 编排、Helm Chart、环境变量模板、校验工具、升级回滚脚本、用户文档和截图材料，不交付后端源码、前端源码、构建私钥、授权中心源码或客户专属 License。
+DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的数据同步控制台。私有化部署包只包含固定版本商业镜像引用、Docker Compose 编排、Helm Chart、环境变量模板、校验工具、升级回滚脚本、用户文档和截图材料，不交付后端源码、前端源码、构建私钥、授权中心源码或客户专属授权。
 
 ## 1. 部署目标
 
@@ -74,11 +74,11 @@ images/
 - 可用端口：默认前端 `8080`，后端 `18000`，PostgreSQL `15432`，Redis `16379`。
 - 稳定访问域名或内网地址。
 - 生产随机密钥：`POSTGRES_PASSWORD`、`JWT_SECRET_KEY`、`ENCRYPTION_SECRET_KEY`、管理员初始密码。
-- License 公钥、客户 ID、稳定部署 ID，以及在线激活码或离线 License。
+- 使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
 - 外部 Kafka、Flink SQL Gateway、源端、目标端、目标表和数据库授权。
 - 备份目录和回滚窗口。
 
-不得把 `.env`、License、激活码、Token、私钥、客户部署指纹、真实连接串或现场拓扑写入公开仓库、公开工单或聊天群。
+不得把 `.env`、授权文件、激活码、Token、私钥、客户部署指纹、真实连接串或现场拓扑写入公开仓库、公开工单或聊天群。
 
 ## 5. Docker Compose 部署流程
 
@@ -137,7 +137,7 @@ helm upgrade --install datafusionx ./helm/datafusionx-commercial \
   --set secrets.postgresPassword='<数据库密码>' \
   --set secrets.jwtSecretKey='<至少 32 位 JWT 密钥>' \
   --set secrets.encryptionSecretKey='<至少 32 位加密密钥>' \
-  --set secrets.licensePublicKey='<License 公钥>' \
+  --set secrets.licensePublicKey='<使用授权公钥>' \
   --set secrets.licenseDeploymentId='<稳定部署 ID>'
 ```
 
@@ -179,7 +179,7 @@ python tools/commercial-manifest.py verify-release \
 
 1. 使用初始化管理员账号登录控制台。
 2. 修改默认管理员密码。
-3. 进入系统健康页确认后端、Worker、Beat、PostgreSQL、Redis、License 和商业完整性状态。
+3. 进入系统健康页确认后端、Worker、Beat、PostgreSQL、Redis、授权和商业完整性状态。
 4. 如需统一身份，配置 LDAP、OIDC、CAS 或企业 IM 登录。
 5. 创建项目，添加项目成员并分配 `viewer`、`operator`、`admin`。
 6. 配置源端连接和目标端连接，并完成连通性检查和 catalog 校验。
@@ -198,8 +198,8 @@ python tools/commercial-manifest.py verify-release \
 - 已准备 Docker Compose 或 Kubernetes / Helm 环境。
 - 已确认服务器可以拉取固定版本镜像，或已导入离线镜像。
 - 已复制 `.env.example` 为 `.env` 并替换所有 `change-me` 值。
-- 已准备 License 公钥、客户 ID、稳定部署 ID，以及在线激活码或离线 License。
-- 已确认 `.env`、License 文件、激活码、Token、私钥、部署指纹和数据库连接串不会进入公开材料。
+- 已准备使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
+- 已确认 `.env`、授权文件、激活码、Token、私钥、部署指纹和数据库连接串不会进入公开材料。
 
 ### 10.2 发布包和镜像
 
@@ -215,7 +215,7 @@ python tools/commercial-manifest.py verify-release \
 - backend、celery-worker、cdc-guard-worker 运行正常。
 - 单节点部署中 celery-beat 运行正常；多节点部署中只有主调度节点运行 celery-beat。
 - 系统管理员可以登录。
-- License 状态有效或仍处于试用期内。
+- 授权状态有效或仍处于试用期内。
 - 默认管理员密码已修改。
 
 ### 10.4 产品使用
@@ -243,7 +243,7 @@ python tools/commercial-manifest.py verify-release \
 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upgrade.sh
 ```
 
-脚本会检查固定版本镜像、关键环境变量、Compose 配置、商业 release manifest、PostgreSQL 元数据库备份、License volume 备份、运行中任务、健康检查和 License 状态。
+脚本会检查固定版本镜像、关键环境变量、Compose 配置、商业 release manifest、PostgreSQL 元数据库备份、授权数据卷备份、运行中任务、健康检查和授权状态。
 
 升级：
 
@@ -266,9 +266,9 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 - 不提交 `.env`、真实数据库连接串、Token、私钥、云服务凭据、SSH Host、凭据路径、现场 runbook、客户部署指纹或真实拓扑。
 - 不在客户侧部署授权中心私钥。
 - 不使用 `latest` 镜像标签进入生产。
-- 不绕过执行计划审批、DDL 卫士、License 拦截、审计和商业完整性校验。
+- 不绕过执行计划审批、DDL 卫士、授权拦截、审计和商业完整性校验。
 - 共享日志、截图、诊断包和验收材料前必须脱敏。
 
 ## 13. 公开发布源头
 
-DataFusionX Enterprise 私有源码仓库是唯一研发、构建、签名和发布源头。正式 tag 或显式手动发布时，商业发布流程会生成部署包并同步到 `Lynn-Lee/DataFusionX-Deploy`。公开部署仓库只保存用户部署入口、用户文档、校验工具、固定版本镜像引用和历史版本压缩包，不保存源码、私钥、真实 License、激活码、客户部署指纹、授权中心 token、现场 runbook、真实拓扑或 sourcemap。
+DataFusionX Enterprise 私有源码仓库是唯一研发、构建、签名和发布源头。正式 tag 或显式手动发布时，商业发布流程会生成部署包并同步到 `Lynn-Lee/DataFusionX-Deploy`。公开部署仓库只保存用户部署入口、用户文档、校验工具、固定版本镜像引用和历史版本压缩包，不保存源码、私钥、真实授权文件、激活码、客户部署指纹、授权中心 token、现场 runbook、真实拓扑或 sourcemap。

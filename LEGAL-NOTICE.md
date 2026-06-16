@@ -12,7 +12,7 @@ DataFusionX Enterprise 是商业软件。本公开部署仓库用于下载部署
 
 正式授权通常绑定客户 ID、部署 ID、版本范围、功能模块、额度和有效期。DataFusionX Enterprise 支持在线激活、联网刷新和离线授权导入。长期离线环境请提前规划离线授权流程。
 
-授权材料、激活码、离线 License、部署指纹和客户凭据不包含在公开仓库中，也不应提交到公开工单、公开仓库或聊天群。
+授权材料、激活码、离线授权、部署指纹和客户凭据不包含在公开仓库中，也不应提交到公开工单、公开仓库或聊天群。
 
 ## 使用限制
 
@@ -25,7 +25,7 @@ DataFusionX Enterprise 是商业软件。本公开部署仓库用于下载部署
 
 ## 客户责任
 
-- 妥善保管 `.env`、License 文件、激活码、Token、私钥、部署指纹和数据库凭据。
+- 妥善保管 `.env`、授权文件、激活码、Token、私钥、部署指纹和数据库凭据。
 - 使用固定版本镜像和 signed release manifest 部署或升级。
-- 升级和回滚前备份元数据库和 License volume。
+- 升级和回滚前备份元数据库和授权数据卷。
 - 确认 DataFusionX Enterprise 仅作为控制面使用，外部 Kafka Topic、CDC Connector、Flink 集群、StarRocks 表和关系型目标表仍由客户侧管理。

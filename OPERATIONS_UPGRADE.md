@@ -21,7 +21,7 @@ curl -fsS http://localhost:18000/api/v1/health
 - `cdc-guard-worker` 是否运行。
 - `celery-beat` 是否只在单一调度节点运行。
 - PostgreSQL 和 Redis 是否可用。
-- License 状态是否有效。
+- 授权状态是否有效。
 - 运行中心是否存在长时间卡住的运行实例。
 - 诊断中心是否存在高风险任务、连接或容量风险。
 - 告警通知渠道是否可发送测试消息。
@@ -57,14 +57,14 @@ kubectl logs deploy/datafusionx-cdc-guard-worker --tail=200
 kubectl logs deploy/datafusionx-celery-beat --tail=200
 ```
 
-共享日志前请先脱敏，不要包含 `.env`、License 文件、激活码、Token、私钥、部署指纹、数据库连接串或客户现场拓扑。
+共享日志前请先脱敏，不要包含 `.env`、授权文件、激活码、Token、私钥、部署指纹、数据库连接串或客户现场拓扑。
 
 ## 4. 备份策略
 
 升级、迁移或重大配置变更前必须备份：
 
 - PostgreSQL 元数据库。
-- License volume。
+- 授权数据卷。
 - 当前 `.env` 的脱敏快照和回滚所需本地副本。
 - 当前部署包、镜像版本和 release manifest。
 
@@ -84,9 +84,9 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upgrade.sh
 - Compose 配置。
 - release manifest 签名。
 - 后端健康状态。
-- License 状态。
+- 授权状态。
 - PostgreSQL 元数据库备份。
-- License volume 备份。
+- 授权数据卷备份。
 - 运行中任务状态。
 
 `backups/preflight-<时间戳>/env.full.local`、`env.rollback.local`、`metadata.dump` 和 `licenses.tgz` 是敏感材料，不得上传到公开仓库、公开工单或聊天群。
@@ -126,7 +126,7 @@ docker compose -f deploy/docker-compose.yml --env-file .env ps
 
 - 登录成功。
 - 系统健康正常。
-- License 状态有效。
+- 授权状态有效。
 - 项目列表、连接管理、任务同步、SQL 作业、调度视图、运行中心、诊断中心可打开。
 - 最近一条运行记录可查看日志和详情。
 
@@ -143,7 +143,7 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 
 - 控制台可访问。
 - 后端健康检查通过。
-- License 状态有效。
+- 授权状态有效。
 - PostgreSQL 元数据恢复到预期版本。
 - 运行中心无异常卡死任务。
 - 调度状态符合回滚前业务预期。
@@ -172,7 +172,7 @@ Kubernetes 或 systemd 部署请使用对应平台命令确认只有一个 Beat 
 
 功能受限：
 
-- 检查 License 状态、功能项、额度和有效期。
+- 检查授权状态、功能项、额度和有效期。
 - 检查用户项目角色和资源级授权。
 
 任务无法启动：
@@ -205,7 +205,7 @@ Kubernetes 或 systemd 部署请使用对应平台命令确认只有一个 Beat 
 - `.env`
 - `env.full.local`
 - `env.rollback.local`
-- License 文件
+- 授权文件
 - 激活码
 - Token
 - 私钥

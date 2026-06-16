@@ -27,14 +27,14 @@ Docker Compose 部署需要：
 - 可访问固定版本镜像：`ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke`、`ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke`。
 - 可用端口：默认前端 `8080`，后端 `18000`，PostgreSQL `15432`，Redis `16379`。
 - PostgreSQL 和 Redis 数据卷可持久化。
-- 有效 License 公钥、客户 ID、稳定部署 ID，以及在线激活码或离线 License。
+- 有效的使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
 
 Kubernetes 部署需要：
 
 - 可用 Kubernetes 集群。
 - Helm 3。
 - 可拉取固定版本镜像的镜像仓库访问能力。
-- 持久化存储能力，用于 PostgreSQL、Redis 和 License 文件。
+- 持久化存储能力，用于 PostgreSQL、Redis 和授权文件。
 - Ingress、TLS 和域名按企业规范准备。
 
 生产部署前请准备：
@@ -43,7 +43,7 @@ Kubernetes 部署需要：
 - 至少 32 位 `JWT_SECRET_KEY`。
 - 至少 32 位 `ENCRYPTION_SECRET_KEY`。
 - PostgreSQL 强密码。
-- License 相关配置。
+- 授权相关配置。
 - 告警通知渠道和运维联系人。
 
 ## 3. 获取部署包
@@ -97,7 +97,7 @@ LICENSE_DEPLOYMENT_ID
 COMMERCIAL_INTEGRITY_PUBLIC_KEY
 ```
 
-`LICENSE_DEPLOYMENT_ID` 是部署指纹计算的一部分，生成后应长期保持稳定。随意变更会导致 License 需要重新签发或迁移。
+`LICENSE_DEPLOYMENT_ID` 是部署指纹计算的一部分，生成后应长期保持稳定。随意变更会导致授权需要重新签发或迁移。
 
 端口默认值：
 
@@ -163,11 +163,11 @@ helm upgrade --install datafusionx ./helm/datafusionx-commercial \
   --set secrets.postgresPassword='<数据库密码>' \
   --set secrets.jwtSecretKey='<至少 32 位 JWT 密钥>' \
   --set secrets.encryptionSecretKey='<至少 32 位加密密钥>' \
-  --set secrets.licensePublicKey='<License 公钥>' \
+  --set secrets.licensePublicKey='<使用授权公钥>' \
   --set secrets.licenseDeploymentId='<稳定部署 ID>'
 ```
 
-生产环境建议使用 values 文件或 Kubernetes Secret 管理敏感配置，不要把密码、Token、License 或私钥写入命令历史、公开仓库或工单。
+生产环境建议使用 values 文件或 Kubernetes Secret 管理敏感配置，不要把密码、Token、授权文件或私钥写入命令历史、公开仓库或工单。
 
 部署后检查：
 
@@ -190,27 +190,27 @@ DEFAULT_ADMIN_PASSWORD
 
 1. 修改管理员密码。
 2. 确认系统健康状态。
-3. 确认 License 状态。
+3. 确认授权状态。
 4. 创建业务项目。
 5. 添加项目成员并分配角色。
 
 本地开发或测试可使用初始化账号；生产环境必须使用强随机密码，并妥善保存管理员账号。
 
-## 8. License 激活
+## 8. 授权激活
 
 在线激活：
 
 1. 使用系统管理员登录。
 2. 进入系统健康或授权管理入口。
 3. 填写客户 ID 和在线激活码。
-4. 提交激活并确认 License 状态为有效。
+4. 提交激活并确认授权状态为有效。
 
 离线激活：
 
 1. 在授权页面生成离线申请。
 2. 将离线申请 JSON 交给授权运营侧。
-3. 获取 signed License JSON。
-4. 在授权页面导入 signed License。
+3. 获取签名授权 JSON。
+4. 在授权页面导入签名授权。
 
 离线申请不包含数据库密码、私钥或连接凭据。
 
@@ -227,7 +227,7 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 控制台内检查：
 
 - 系统健康页面无异常组件。
-- License 状态有效。
+- 授权状态有效。
 - 创建测试项目成功。
 - 添加源端和目标端连接成功。
 - 连接连通性检查可执行。
@@ -237,7 +237,7 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 
 - 镜像拉取失败：确认服务器可访问镜像仓库，且镜像标签为固定版本 `0.1.0-deploy-smoke`。
 - 后端启动失败：检查 `JWT_SECRET_KEY`、`ENCRYPTION_SECRET_KEY`、`POSTGRES_PASSWORD` 和 `COMMERCIAL_INTEGRITY_PUBLIC_KEY`。
-- 登录后功能受限：检查 License 是否已导入、是否过期、是否包含所需功能和额度。
+- 登录后功能受限：检查授权是否已导入、是否过期、是否包含所需功能和额度。
 - 前端无法访问后端：检查反向代理、`BACKEND_PORT`、容器网络和浏览器控制台错误。
 - 数据同步作业无法部署：确认外部 Flink SQL Gateway、Kafka、源端和目标端连接均可访问。
 - 调度重复触发：确认多节点部署中只有一个 `celery-beat` 常驻运行。
