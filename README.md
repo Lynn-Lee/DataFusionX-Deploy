@@ -2,7 +2,7 @@
 
 DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是用户下载、部署和升级 DataFusionX Enterprise 的公开入口，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和功能截图。
 
-当前发布版本：`0.1.0-deploy-smoke`
+当前发布版本：`1.0.0`
 
 ## 项目定位
 
@@ -119,17 +119,17 @@ curl -fsS http://localhost:18000/api/v1/health
 
 ## 发布包校验
 
-如果下载 `releases/v0.1.0-deploy-smoke/DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz` 固定版本包，请先校验 sha256：
+如果下载 `releases/v1.0.0/DataFusionX-Enterprise-v1.0.0.tar.gz` 固定版本包，请先校验 sha256：
 
 ```bash
-shasum -a 256 -c releases/v0.1.0-deploy-smoke/DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz.sha256
+shasum -a 256 -c releases/v1.0.0/DataFusionX-Enterprise-v1.0.0.tar.gz.sha256
 ```
 
 正式发布包内会随版本生成 `release-manifest.json` 和 `release-manifest.sig`，用于发布流程和交付归档校验。文档或截图单独更新时不应手工伪造重签发布 manifest。
 
 ## 镜像
 
-- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke`
-- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke`
+- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:1.0.0`
+- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:1.0.0`
 
 生产环境不要使用 `latest`，请保留 `.env.example`、Docker Compose 和 Helm values 中的明确版本标签。

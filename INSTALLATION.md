@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 安装部署指南
 
-当前发布版本：`0.1.0-deploy-smoke`
+当前发布版本：`1.0.0`
 
 本文面向首次部署 DataFusionX Enterprise 的系统管理员和运维人员。按本文顺序执行，可以完成部署包获取、配置、Docker Compose 或 Helm 部署、首次登录、授权激活和基础验收。
 
@@ -87,17 +87,17 @@ cd DataFusionX-Deploy
 也可以下载固定版本压缩包：
 
 ```bash
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v0.1.0-deploy-smoke/DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v0.1.0-deploy-smoke/DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz.sha256
-shasum -a 256 -c DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz.sha256
-tar -xzf DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz
-cd DataFusionX-Enterprise-v0.1.0-deploy-smoke
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.0.0/DataFusionX-Enterprise-v1.0.0.tar.gz
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.0.0/DataFusionX-Enterprise-v1.0.0.tar.gz.sha256
+shasum -a 256 -c DataFusionX-Enterprise-v1.0.0.tar.gz.sha256
+tar -xzf DataFusionX-Enterprise-v1.0.0.tar.gz
+cd DataFusionX-Enterprise-v1.0.0
 ```
 
 如果系统没有 `shasum`，可使用：
 
 ```bash
-sha256sum -c DataFusionX-Enterprise-v0.1.0-deploy-smoke.tar.gz.sha256
+sha256sum -c DataFusionX-Enterprise-v1.0.0.tar.gz.sha256
 ```
 
 发布包内主要文件：
@@ -124,7 +124,7 @@ chmod 600 .env
 
 | 配置项 | 必填 | 说明 |
 | --- | --- | --- |
-| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `0.1.0-deploy-smoke`。 |
+| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `1.0.0`。 |
 | `DATAFUSIONX_BACKEND_IMAGE` | 是 | 后端 / Worker / Beat 固定版本镜像。 |
 | `DATAFUSIONX_FRONTEND_IMAGE` | 是 | 前端固定版本镜像。 |
 | `DATAFUSIONX_PUBLIC_URL` | 是 | 用户浏览器访问控制台的最终地址，例如 `https://datafusionx.example.com`。 |
@@ -256,8 +256,8 @@ DEFAULT_ADMIN_PASSWORD
 如果服务器无法访问 GHCR，请先在可联网机器下载或由交付方提供镜像 tar，然后传到目标服务器：
 
 ```bash
-docker load -i datafusionx-backend-commercial-0.1.0-deploy-smoke.tar
-docker load -i datafusionx-frontend-commercial-0.1.0-deploy-smoke.tar
+docker load -i datafusionx-backend-commercial-1.0.0.tar
+docker load -i datafusionx-frontend-commercial-1.0.0.tar
 docker images | grep datafusionx
 ```
 
@@ -282,11 +282,11 @@ cp helm/datafusionx-commercial/values.yaml values-prod.yaml
 
 ```yaml
 global:
-  version: "0.1.0-deploy-smoke"
+  version: "1.0.0"
   publicUrl: "https://datafusionx.example.com"
 image:
-  backend: "ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke"
-  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke"
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.0.0"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.0.0"
 secrets:
   postgresPassword: "<数据库密码>"
   jwtSecretKey: "<至少 32 字节 JWT 密钥>"

@@ -1,10 +1,10 @@
 global:
-  version: "0.1.0-deploy-smoke"
+  version: "1.0.0"
   publicUrl: "http://datafusionx.example.com"
 
 image:
-  backend: "ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke"
-  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke"
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.0.0"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.0.0"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

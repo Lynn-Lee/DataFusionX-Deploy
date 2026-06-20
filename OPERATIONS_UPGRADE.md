@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 运维与升级指南
 
-当前发布版本：`0.1.0-deploy-smoke`
+当前发布版本：`1.0.0`
 
 本文面向负责 DataFusionX Enterprise 日常运维、升级、备份、回滚和故障排查的管理员。所有命令默认在部署目录执行，也就是包含 `.env`、`deploy/docker-compose.yml`、`preflight-upgrade.sh`、`upgrade.sh` 和 `rollback.sh` 的目录。
 
@@ -146,9 +146,9 @@ ALLOW_RUNNING_TASKS=1 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upg
 升级前编辑 `.env`，把版本和镜像引用改成目标版本：
 
 ```text
-DATAFUSIONX_VERSION=0.1.0-deploy-smoke
-DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:0.1.0-deploy-smoke
-DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:0.1.0-deploy-smoke
+DATAFUSIONX_VERSION=1.0.0
+DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:1.0.0
+DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:1.0.0
 ```
 
 生产环境必须使用固定版本标签，不要使用 `latest` 或无标签镜像。
