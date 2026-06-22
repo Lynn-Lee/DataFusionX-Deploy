@@ -4,18 +4,18 @@
   "files": [
     {
       "path": ".env.example",
-      "sha256": "ccb064e3273464b8c14ecd13bfa62f5b2db9c6e61f9a9852c69daea88e996c7b",
-      "size": 1393
+      "sha256": "d52820e74ed1534fcdd35eae126875bc16546667b34fa087645ee96c8e11c5b6",
+      "size": 1422
     },
     {
       "path": "COMMERCIAL_DEPLOYMENT.md",
-      "sha256": "b8431d826f545a2a3c43d0d36cc779b0dd5b31851adf6667b864be8e956a0138",
-      "size": 12854
+      "sha256": "025a478786d1dd38965e6608512b9b1e6be4a838dbe82918a7bea53e384f516f",
+      "size": 13186
     },
     {
       "path": "INSTALLATION.md",
-      "sha256": "102471b018310fa23218512d6b2bf1a49cea7a4abcc694e15fdac631359096f7",
-      "size": 14005
+      "sha256": "8b448979f55d4343618732555f00ce1c658d15b7baf5a8aebf1c7de4c2bc3d10",
+      "size": 16240
     },
     {
       "path": "LEGAL-NOTICE.md",
@@ -24,22 +24,22 @@
     },
     {
       "path": "OPERATIONS_UPGRADE.md",
-      "sha256": "fe70e3aad2fa9e6e2330ed414c0ff91e0df87fb6e02da279867d3b782fee9889",
-      "size": 11518
+      "sha256": "a417e84e590d2503a7c1396a098b4c28d8fd99c967173c3c999bf03c0ead1d25",
+      "size": 12214
     },
     {
       "path": "README.md",
-      "sha256": "92a0feaa9408ef186e7f1ea72e3510aa9e974fecceca3bc852f029b470754cea",
-      "size": 5613
+      "sha256": "573f4f82b2193ed7cbb99406f51a97a7a9b8ce1ed92836c266d92d7630c1beba",
+      "size": 6039
     },
     {
       "path": "USER_GUIDE.md",
-      "sha256": "84d940e05aa15c70e38443ee5246ba74948a76adaefad0fe7046c1183aba9508",
-      "size": 13088
+      "sha256": "ce8c327d8b7e3315b820afb5d625ee8bc4a15222cb37a1336a4b21c96648f3fd",
+      "size": 13900
     },
     {
       "path": "checksums.txt",
-      "sha256": "36fd90631e1ef45074b3ee762b7f501292666789ebafb38d5aec5275892fb865",
+      "sha256": "96678bc0e9c1e20ef780b975a8bfc627221730bf76c00b78db988b865b5bb233",
       "size": 4391
     },
     {
@@ -49,7 +49,7 @@
     },
     {
       "path": "helm/datafusionx-commercial/Chart.yaml",
-      "sha256": "7d87d8627b0d5ea6bb89a5024465f680a427e07d9aa50da87476fe312650faee",
+      "sha256": "116c4f1dbfd2518e35a97eafdc4758510e73b173d2df549609cc2612020823e3",
       "size": 168
     },
     {
@@ -104,7 +104,7 @@
     },
     {
       "path": "helm/datafusionx-commercial/values.yaml",
-      "sha256": "52788eb7a19dc93fa760b3b629430e9cc483b0f9287e8c24a9953f1d761f042c",
+      "sha256": "f79d558beedf9b71e58fb56b1522003003fb38aa1aa959eaf70fc3244965422c",
       "size": 2177
     },
     {
@@ -214,8 +214,8 @@
     },
     {
       "path": "tools/commercial-manifest.py",
-      "sha256": "3603c392dc08168dc2f48f989abb919a5944815270d5b367fba7e7de637246be",
-      "size": 5995
+      "sha256": "b0ea0d5148473acd3a9f0d12b777d81c1701716639be0b638c09f0ce34c23606",
+      "size": 7121
     },
     {
       "path": "upgrade.sh",
@@ -228,12 +228,21 @@
       "size": 2866
     }
   ],
-  "generated_at": "2026-06-22T08:39:26.950175+00:00",
+  "generated_at": "2026-06-22T16:06:35.429589+00:00",
   "images": [
-    "ghcr.io/lynn-lee/datafusionx-backend:1.1.0",
-    "ghcr.io/lynn-lee/datafusionx-frontend:1.1.0"
+    "ghcr.io/lynn-lee/datafusionx-backend:1.1.1",
+    "ghcr.io/lynn-lee/datafusionx-frontend:1.1.1"
   ],
   "product": "datafusionx",
+  "releaseSource": {
+    "buildActor": "Lynn-Lee",
+    "buildCommit": "ecf179a6c7f272a0bc878dd46411b2d5bf5bb998",
+    "buildRef": "refs/heads/main",
+    "buildRunId": "27964957077",
+    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/27964957077",
+    "giteeSha": "gitee/main",
+    "originSha": "ecf179a6c7f272a0bc878dd46411b2d5bf5bb998"
+  },
   "schema": 1,
-  "version": "1.1.0"
+  "version": "1.1.1"
 }

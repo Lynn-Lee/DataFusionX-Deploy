@@ -62,7 +62,12 @@ def generate_keypair() -> None:
     print(f"COMMERCIAL_MANIFEST_PUBLIC_KEY={b64encode(public_raw)}")
 
 
-def build_release_manifest(package_dir: Path, version: str, images: list[str]) -> dict[str, Any]:
+def build_release_manifest(
+    package_dir: Path,
+    version: str,
+    images: list[str],
+    release_source: dict[str, str] | None = None,
+) -> dict[str, Any]:
     """根据商业部署包内容生成 release manifest。"""
     files = []
     for path in sorted(package_dir.rglob("*")):
@@ -79,7 +84,7 @@ def build_release_manifest(package_dir: Path, version: str, images: list[str]) -
                 "size": len(data),
             }
         )
-    return {
+    manifest = {
         "schema": 1,
         "product": "datafusionx",
         "edition": "enterprise",
@@ -89,11 +94,21 @@ def build_release_manifest(package_dir: Path, version: str, images: list[str]) -
         "algorithm": "sha256",
         "files": files,
     }
+    normalized_source = {key: value for key, value in (release_source or {}).items() if value}
+    if normalized_source:
+        manifest["releaseSource"] = normalized_source
+    return manifest
 
 
-def sign_release(package_dir: Path, version: str, private_key_value: str, images: list[str]) -> None:
+def sign_release(
+    package_dir: Path,
+    version: str,
+    private_key_value: str,
+    images: list[str],
+    release_source: dict[str, str] | None = None,
+) -> None:
     """签名商业部署包 release manifest。"""
-    manifest = build_release_manifest(package_dir, version, images)
+    manifest = build_release_manifest(package_dir, version, images, release_source=release_source)
     manifest_path = package_dir / "release-manifest.json"
     signature_path = package_dir / "release-manifest.sig"
     manifest_path.write_text(
@@ -136,6 +151,13 @@ def main() -> None:
     sign_parser.add_argument("--version", required=True)
     sign_parser.add_argument("--private-key", required=True)
     sign_parser.add_argument("--image", action="append", default=[])
+    sign_parser.add_argument("--build-commit", default="")
+    sign_parser.add_argument("--origin-sha", default="")
+    sign_parser.add_argument("--gitee-sha", default="")
+    sign_parser.add_argument("--build-ref", default="")
+    sign_parser.add_argument("--build-actor", default="")
+    sign_parser.add_argument("--build-run-id", default="")
+    sign_parser.add_argument("--build-run-url", default="")
 
     verify_parser = subparsers.add_parser("verify-release")
     verify_parser.add_argument("--package-dir", required=True)
@@ -146,7 +168,16 @@ def main() -> None:
         generate_keypair()
         return
     if args.command == "sign-release":
-        sign_release(Path(args.package_dir), args.version, args.private_key, args.image)
+        release_source = {
+            "buildCommit": args.build_commit,
+            "originSha": args.origin_sha,
+            "giteeSha": args.gitee_sha,
+            "buildRef": args.build_ref,
+            "buildActor": args.build_actor,
+            "buildRunId": args.build_run_id,
+            "buildRunUrl": args.build_run_url,
+        }
+        sign_release(Path(args.package_dir), args.version, args.private_key, args.image, release_source)
         return
     if args.command == "verify-release":
         verify_release(Path(args.package_dir), args.public_key)

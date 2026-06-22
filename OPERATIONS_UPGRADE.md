@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 运维与升级指南
 
-当前发布版本：`1.1.0`
+当前发布版本：`1.1.1`
 
 本文面向负责 DataFusionX Enterprise 日常运维、升级、备份、回滚和故障排查的管理员。所有命令默认在部署目录执行，也就是包含 `.env`、`deploy/docker-compose.yml`、`preflight-upgrade.sh`、`upgrade.sh` 和 `rollback.sh` 的目录。
 
@@ -146,9 +146,9 @@ ALLOW_RUNNING_TASKS=1 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upg
 升级前编辑 `.env`，把版本和镜像引用改成目标版本：
 
 ```text
-DATAFUSIONX_VERSION=1.1.0
-DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:1.1.0
-DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:1.1.0
+DATAFUSIONX_VERSION=1.1.1
+DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:1.1.1
+DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:1.1.1
 ```
 
 生产环境必须使用固定版本标签，不要使用 `latest` 或无标签镜像。
@@ -274,6 +274,14 @@ kubectl get pods | grep celery-beat
 ```
 
 预期结果：生产调度域内只有一个 Beat 实例处于 Running / enabled 状态。
+
+发布脚本在重建服务前会先优雅停止 `celery-worker`、`cdc-guard-worker` 和 `celery-beat`。如果日志时间点正好落在发布窗口，少量 `SIGTERM`、`WorkerLostError` 或 worker warm shutdown 记录通常表示容器被部署流程停止，不应单独视为运行故障。发布后请用下面的口径复核：
+
+```bash
+docker compose -f deploy/docker-compose.yml --env-file .env logs --since=10m celery-worker cdc-guard-worker celery-beat | grep -E 'ERROR|WorkerLostError|Traceback' || true
+```
+
+预期结果：重启后无新增 ERROR；如仍持续出现非发布窗口内的 `WorkerLostError`、`Traceback` 或任务失败日志，再按运行失败路径排查。
 
 ## 9. 故障排查路径
 

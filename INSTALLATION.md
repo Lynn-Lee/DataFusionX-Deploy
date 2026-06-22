@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 安装部署指南
 
-当前发布版本：`1.1.0`
+当前发布版本：`1.1.1`
 
 本文面向首次部署 DataFusionX Enterprise 的系统管理员和运维人员。按本文顺序执行，可以完成部署包获取、配置、Docker Compose 或 Helm 部署、首次登录、授权激活和基础验收。
 
@@ -87,17 +87,17 @@ cd DataFusionX-Deploy
 也可以下载固定版本压缩包：
 
 ```bash
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.0/DataFusionX-Enterprise-v1.1.0.tar.gz
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.0/DataFusionX-Enterprise-v1.1.0.tar.gz.sha256
-shasum -a 256 -c DataFusionX-Enterprise-v1.1.0.tar.gz.sha256
-tar -xzf DataFusionX-Enterprise-v1.1.0.tar.gz
-cd DataFusionX-Enterprise-v1.1.0
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.1/DataFusionX-Enterprise-v1.1.1.tar.gz
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.1/DataFusionX-Enterprise-v1.1.1.tar.gz.sha256
+shasum -a 256 -c DataFusionX-Enterprise-v1.1.1.tar.gz.sha256
+tar -xzf DataFusionX-Enterprise-v1.1.1.tar.gz
+cd DataFusionX-Enterprise-v1.1.1
 ```
 
 如果系统没有 `shasum`，可使用：
 
 ```bash
-sha256sum -c DataFusionX-Enterprise-v1.1.0.tar.gz.sha256
+sha256sum -c DataFusionX-Enterprise-v1.1.1.tar.gz.sha256
 ```
 
 发布包内主要文件：
@@ -124,7 +124,7 @@ chmod 600 .env
 
 | 配置项 | 必填 | 说明 |
 | --- | --- | --- |
-| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `1.1.0`。 |
+| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `1.1.1`。 |
 | `DATAFUSIONX_BACKEND_IMAGE` | 是 | 后端 / Worker / Beat 固定版本镜像。 |
 | `DATAFUSIONX_FRONTEND_IMAGE` | 是 | 前端固定版本镜像。 |
 | `DATAFUSIONX_PUBLIC_URL` | 是 | 用户浏览器访问控制台的最终地址，例如 `https://datafusionx.example.com`。 |
@@ -139,6 +139,35 @@ chmod 600 .env
 | `COMMERCIAL_INTEGRITY_PUBLIC_KEY` | 是 | 商业发布包完整性验签公钥。 |
 
 `LICENSE_DEPLOYMENT_ID` 是部署指纹计算的一部分，随意变更会导致授权需要重新签发或迁移。建议用企业内唯一且稳定的值，例如 `customer-prod-datafusionx-001`，不要写真实机密或服务器地址。
+
+### 5.1 外部运行时接入配置
+
+Compose 部署时，复制 `.env.example` 为 `.env` 后，需要填写客户已有 Flink 入口：
+
+```text
+FLINK_SQL_GATEWAY_URL=http://flink-sql-gateway.example.com:8083
+FLINK_REST_URL=http://flink-rest.example.com:8081
+```
+
+如果希望“系统健康”页面做平台级 Kafka 连通性检查，可填写：
+
+```text
+KAFKA_BOOTSTRAP_SERVERS=kafka01:9092,kafka02:9092,kafka03:9092
+```
+
+`KAFKA_BOOTSTRAP_SERVERS` 只用于平台级依赖健康检查。CDC 任务真正消费的 Kafka bootstrap servers 和 Topic，需要在控制台创建 CDC 任务时逐任务填写。
+
+| 配置对象 | 配置位置 | 说明 |
+| --- | --- | --- |
+| Flink SQL Gateway | `.env` 的 `FLINK_SQL_GATEWAY_URL` | DataFusionX Enterprise 提交 CDC、Batch 和 SQL 作业的入口。 |
+| Flink REST | `.env` 的 `FLINK_REST_URL` | 运行中心刷新 Flink Job 状态、异常、指标和 checkpoint 的入口。 |
+| 平台级 Kafka 健康检查 | `.env` 的 `KAFKA_BOOTSTRAP_SERVERS` | 只用于依赖健康检查，可留空。 |
+| CDC 任务 Kafka 消费 | 控制台 CDC 任务表单 | 每个 CDC 任务填写 Kafka Bootstrap Servers、Topic、消息格式和消费起点。 |
+| Flink Connector / JDBC Driver | 客户 Flink 集群插件目录或集群镜像 | Kafka、JDBC、StarRocks 等 connector jar 由 Flink 管理员安装。 |
+| MinIO / S3 checkpoint | 客户 Flink 集群配置 | S3/MinIO 插件、checkpoint、savepoint 和 HA storage 由客户 Flink 集群维护。 |
+| Debezium / Canal / TiCDC | 客户外部 CDC 平台 | DataFusionX Enterprise 不创建 Connector 或 Changefeed，只消费已产生的 Kafka Topic。 |
+
+后端、Celery Worker、Celery Beat 和 CDC Guard Worker 都读取同一份 `.env`。修改 Flink、Kafka 或 DDL Guard 相关环境变量后，需要重启这些服务，避免 API、后台提交、调度刷新和 DDL 卫士使用不同配置。
 
 如果启用企业统一登录，请确认 `.env` 中有：
 
@@ -256,8 +285,8 @@ DEFAULT_ADMIN_PASSWORD
 如果服务器无法访问 GHCR，请先在可联网机器下载或由交付方提供镜像 tar，然后传到目标服务器：
 
 ```bash
-docker load -i datafusionx-backend-commercial-1.1.0.tar
-docker load -i datafusionx-frontend-commercial-1.1.0.tar
+docker load -i datafusionx-backend-commercial-1.1.1.tar
+docker load -i datafusionx-frontend-commercial-1.1.1.tar
 docker images | grep datafusionx
 ```
 
@@ -282,11 +311,11 @@ cp helm/datafusionx-commercial/values.yaml values-prod.yaml
 
 ```yaml
 global:
-  version: "1.1.0"
+  version: "1.1.1"
   publicUrl: "https://datafusionx.example.com"
 image:
-  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.1.0"
-  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.1.0"
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.1.1"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.1.1"
 secrets:
   postgresPassword: "<数据库密码>"
   jwtSecretKey: "<至少 32 字节 JWT 密钥>"
@@ -368,7 +397,8 @@ DEFAULT_ADMIN_USERNAME='<管理员账号>' DEFAULT_ADMIN_PASSWORD='<新管理员
 | 后端启动失败 | JWT、加密密钥、PostgreSQL 密码、授权公钥、完整性公钥 | `docker compose -f deploy/docker-compose.yml --env-file .env logs --tail=200 backend` |
 | 前端可打开但登录失败 | 后端健康、`DATAFUSIONX_PUBLIC_URL`、反向代理、浏览器控制台 | `curl -fsS http://localhost:18000/api/v1/health` |
 | 登录后功能受限 | 授权是否已导入、是否过期、功能和额度是否满足 | `DEFAULT_ADMIN_PASSWORD='<密码>' ./verify-license.sh` |
-| 数据同步作业无法部署 | 外部 Flink SQL Gateway、Kafka、源端、目标端、目标表是否准备完成 | 在控制台连接测试和 catalog 校验 |
+| 数据同步作业无法部署 | `.env` 中 Flink SQL Gateway / REST 是否可达，CDC 任务级 Kafka 配置、源端、目标端、目标表是否准备完成 | 在控制台连接测试、catalog 校验和系统健康页面复核 |
+| Flink 作业启动后缺少 connector 或 checkpoint 失败 | 客户 Flink 集群是否已安装 Kafka / JDBC / StarRocks / S3 等 connector、driver 和 MinIO/S3 checkpoint 配置 | 在外部 Flink Web UI、TaskManager 日志和 Flink 集群配置中排查 |
 | 调度重复触发 | 是否只有一个 `celery-beat` 常驻运行 | `docker compose -f deploy/docker-compose.yml --env-file .env ps | grep celery-beat` |
 
 ## 13. 下一步

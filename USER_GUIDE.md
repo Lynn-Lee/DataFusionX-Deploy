@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 产品使用手册
 
-当前发布版本：`1.1.0`
+当前发布版本：`1.1.1`
 
 本文面向完成部署后的系统管理员、项目管理员、DBA、数据开发和运维人员，按“初始化、项目、连接、任务、审批、调度、运行、诊断、投产检查”的路径说明如何把 DataFusionX Enterprise 配置到可正式使用状态。页面数据请以实际部署环境为准。
 
@@ -9,7 +9,7 @@
 部署完成后，先用 `.env` 中的初始化管理员账号登录控制台。首次登录建议立即完成以下动作：
 
 1. 修改默认管理员密码。
-2. 进入 `平台治理` → `系统健康`，确认授权、后端服务、Worker、调度器、PostgreSQL、Redis 和商业完整性状态。
+2. 进入 `平台治理` → `系统健康`，在 `商业授权` 页签确认授权、后端服务、Worker、调度器、PostgreSQL、Redis 和商业完整性状态，在 `外部运行依赖` 页签确认 Flink SQL Gateway、Flink REST、CDC Kafka 任务配置和 Flink Connector/MinIO/S3 的责任边界。
 3. 如需接入统一身份，进入 `平台治理` → `系统配置` 配置 LDAP、OIDC、CAS、钉钉、飞书、企业微信、邮件、短信等基础项。
 4. 确认系统时间、访问域名、回调地址和通知渠道符合客户环境。
 
@@ -99,6 +99,7 @@
 CDC 同步消费客户外部已创建的 Kafka Topic，经外部 Flink SQL Gateway 提交作业写入目标端。创建 CDC 作业前请确认：
 
 - Kafka Topic 已存在，消息格式符合兼容矩阵。
+- Kafka Bootstrap Servers 和 Kafka Topic 是任务级配置，需要在 CDC 任务表单中填写；平台 `.env` 中的 `KAFKA_BOOTSTRAP_SERVERS` 只用于全局依赖健康检查，不能替代任务配置。
 - Debezium、Canal 或 TiCDC 的版本组合已经过验证。
 - 目标表已存在。
 - 关系型目标端具备兼容主键或唯一约束。
@@ -126,6 +127,7 @@ Batch 作业发布前请确认：
 ![SQL 作业](screenshots/sql-jobs.png)
 
 SQL 作业只提交到外部 Flink SQL Gateway，不直接 JDBC 连接生产库执行 SQL。
+部署管理员需要先在平台 `.env` 中配置可从后端访问的 `FLINK_SQL_GATEWAY_URL` 和 `FLINK_REST_URL`；Flink 集群侧的 JDBC、StarRocks、Kafka、S3/MinIO 等 connector、driver 和 checkpoint/savepoint 配置由客户 Flink 管理员维护。
 
 支持能力：
 
@@ -274,6 +276,7 @@ Webhook URL、签名密钥和邮件配置中的敏感字段会加密保存并脱
 - 授权状态有效或仍处于试用期内，功能和额度满足当前项目。
 - 项目成员和资源级授权已配置。
 - 源端、目标端、Flink SQL Gateway、Kafka、Topic、Connector 和目标表均已由外部平台准备。
+- Flink 集群已安装 Kafka、JDBC、StarRocks、S3/MinIO 等所需 connector 与 driver，MinIO/S3 checkpoint、savepoint 和 HA storage 已由 Flink 管理员验证。
 - 连接连通性检查和 catalog 校验通过。
 - 执行计划已发布并审批。
 - DDL 卫士策略、告警通知和审计保留策略已配置。

@@ -2,13 +2,15 @@
 
 DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是用户下载、部署和升级 DataFusionX Enterprise 的公开入口，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和功能截图。
 
-当前发布版本：`1.1.0`
+当前发布版本：`1.1.1`
 
 ## 项目定位
 
 DataFusionX Enterprise 聚焦企业数据同步“控制面”：把连接管理、CDC / Batch 任务配置、SQL 作业治理、执行计划审批、调度、运行观测、诊断、DDL 变更处理、审计和授权管理统一到一个可交付、可审计、可运维的平台中。
 
 平台不托管生产数据面资源，不自动创建 Kafka Topic、Debezium Connector、TiCDC Changefeed、Flink 集群、生产目标表或数据库授权 SQL。源端、目标端、Kafka、Flink SQL Gateway 和目标表仍由企业现有数据平台、DBA 或运维团队按内部规范准备；DataFusionX Enterprise 负责读取配置、生成执行计划、提交外部 Flink SQL 作业并持续观测运行状态。
+
+部署时需要在 `.env` 中配置外部 Flink SQL Gateway 和 Flink REST 地址；CDC 任务的 Kafka Bootstrap Servers 和 Topic 在任务表单中逐任务填写。Flink Connector jar、JDBC Driver、MinIO/S3 checkpoint、savepoint、HA storage 以及 Debezium / Canal / TiCDC 等外部 CDC 引擎由客户数据平台维护，DataFusionX Enterprise 不上传 jar、不托管 MinIO，也不创建外部运行时资源。
 
 ## 核心能力
 
@@ -119,17 +121,17 @@ curl -fsS http://localhost:18000/api/v1/health
 
 ## 发布包校验
 
-如果下载 `releases/v1.1.0/DataFusionX-Enterprise-v1.1.0.tar.gz` 固定版本包，请先校验 sha256：
+如果下载 `releases/v1.1.1/DataFusionX-Enterprise-v1.1.1.tar.gz` 固定版本包，请先校验 sha256：
 
 ```bash
-shasum -a 256 -c releases/v1.1.0/DataFusionX-Enterprise-v1.1.0.tar.gz.sha256
+shasum -a 256 -c releases/v1.1.1/DataFusionX-Enterprise-v1.1.1.tar.gz.sha256
 ```
 
 正式发布包内会随版本生成 `release-manifest.json` 和 `release-manifest.sig`，用于发布流程和交付归档校验。文档或截图单独更新时不应手工伪造重签发布 manifest。
 
 ## 镜像
 
-- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:1.1.0`
-- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:1.1.0`
+- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:1.1.1`
+- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:1.1.1`
 
 生产环境不要使用 `latest`，请保留 `.env.example`、Docker Compose 和 Helm values 中的明确版本标签。

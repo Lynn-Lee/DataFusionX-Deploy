@@ -76,6 +76,7 @@ images/
 - 生产随机密钥：`POSTGRES_PASSWORD`、`JWT_SECRET_KEY`、`ENCRYPTION_SECRET_KEY`、管理员初始密码。
 - 使用授权公钥、客户 ID、稳定部署 ID，以及在线激活码或离线授权。
 - 外部 Kafka、Flink SQL Gateway、源端、目标端、目标表和数据库授权。
+- 外部 Flink 集群已安装 Kafka / JDBC / StarRocks Connector、JDBC Driver、S3/MinIO 插件，并完成 checkpoint、savepoint 和 HA storage 验证。
 - 备份目录和回滚窗口。
 
 不得把 `.env`、授权文件、激活码、Token、私钥、客户部署指纹、真实连接串或现场拓扑写入公开仓库、公开工单或聊天群。
@@ -253,6 +254,7 @@ python tools/commercial-manifest.py verify-release \
 - 已添加项目成员并分配角色。
 - 已配置源端连接和目标端连接。
 - 已确认外部 Kafka、Flink SQL Gateway、目标表和数据库授权由客户侧准备。
+- 已确认 Flink Connector、JDBC Driver、MinIO/S3 checkpoint 和外部 CDC 引擎由客户数据平台侧维护，DataFusionX Enterprise 不创建或托管这些资源。
 - 已创建并审批至少一个 CDC、Batch 或 SQL 作业。
 - 已完成一次手动验证运行。
 - DDL 卫士、告警通知、诊断中心和审计日志已完成投产前检查。
