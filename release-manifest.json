@@ -228,7 +228,7 @@
       "size": 2866
     }
   ],
-  "generated_at": "2026-06-22T16:06:35.429589+00:00",
+  "generated_at": "2026-06-22T16:32:41.325430+00:00",
   "images": [
     "ghcr.io/lynn-lee/datafusionx-backend:1.1.1",
     "ghcr.io/lynn-lee/datafusionx-frontend:1.1.1"
@@ -236,12 +236,12 @@
   "product": "datafusionx",
   "releaseSource": {
     "buildActor": "Lynn-Lee",
-    "buildCommit": "ecf179a6c7f272a0bc878dd46411b2d5bf5bb998",
+    "buildCommit": "24b255f2d2d0babbb0a865ddac781d66edf2e2d0",
     "buildRef": "refs/heads/main",
-    "buildRunId": "27964957077",
-    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/27964957077",
-    "giteeSha": "gitee/main",
-    "originSha": "ecf179a6c7f272a0bc878dd46411b2d5bf5bb998"
+    "buildRunId": "27966976059",
+    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/27966976059",
+    "giteeSha": "24b255f2d2d0babbb0a865ddac781d66edf2e2d0",
+    "originSha": "24b255f2d2d0babbb0a865ddac781d66edf2e2d0"
   },
   "schema": 1,
   "version": "1.1.1"
