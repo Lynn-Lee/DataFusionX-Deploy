@@ -4,7 +4,7 @@
   "files": [
     {
       "path": ".env.example",
-      "sha256": "ac836cc673923f0b285a1aac28a39ab2fc5d27e88f3bca00edde25e12143b8ee",
+      "sha256": "ccb064e3273464b8c14ecd13bfa62f5b2db9c6e61f9a9852c69daea88e996c7b",
       "size": 1393
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "path": "INSTALLATION.md",
-      "sha256": "fef1f7159b36b3bfb293daef8086e05547a06e2920d5c5ce16fe83ed765c09ec",
+      "sha256": "102471b018310fa23218512d6b2bf1a49cea7a4abcc694e15fdac631359096f7",
       "size": 14005
     },
     {
@@ -24,22 +24,22 @@
     },
     {
       "path": "OPERATIONS_UPGRADE.md",
-      "sha256": "26b3dd2337c67b3aa3f611f0c01fc46b2eb9ee8e1e936a023c7aa21bbc087f2b",
+      "sha256": "fe70e3aad2fa9e6e2330ed414c0ff91e0df87fb6e02da279867d3b782fee9889",
       "size": 11518
     },
     {
       "path": "README.md",
-      "sha256": "ee8853362484b3df655612eed2d9e68e03fe28a245c44a08783ce3cfd74e0035",
+      "sha256": "92a0feaa9408ef186e7f1ea72e3510aa9e974fecceca3bc852f029b470754cea",
       "size": 5613
     },
     {
       "path": "USER_GUIDE.md",
-      "sha256": "c6c2b062a1775a471821b40821cbba69345ce71fe5eead198939ee7e6078aff2",
+      "sha256": "84d940e05aa15c70e38443ee5246ba74948a76adaefad0fe7046c1183aba9508",
       "size": 13088
     },
     {
       "path": "checksums.txt",
-      "sha256": "767d5939b0eab76b6c5028fd29acbd839faf12a98b5bf1fc572c3827200acd9e",
+      "sha256": "36fd90631e1ef45074b3ee762b7f501292666789ebafb38d5aec5275892fb865",
       "size": 4391
     },
     {
@@ -49,7 +49,7 @@
     },
     {
       "path": "helm/datafusionx-commercial/Chart.yaml",
-      "sha256": "1c98ff41da15fcd3b914f7172a1aae2e2767278307aaca3e2b5792132f01e02b",
+      "sha256": "7d87d8627b0d5ea6bb89a5024465f680a427e07d9aa50da87476fe312650faee",
       "size": 168
     },
     {
@@ -104,7 +104,7 @@
     },
     {
       "path": "helm/datafusionx-commercial/values.yaml",
-      "sha256": "b392bd06de67e5d820e663a102624c96566726e5bd5388ea41a8a8f052639fde",
+      "sha256": "52788eb7a19dc93fa760b3b629430e9cc483b0f9287e8c24a9953f1d761f042c",
       "size": 2177
     },
     {
@@ -228,12 +228,12 @@
       "size": 2866
     }
   ],
-  "generated_at": "2026-06-20T15:36:24.077636+00:00",
+  "generated_at": "2026-06-22T08:39:26.950175+00:00",
   "images": [
-    "ghcr.io/lynn-lee/datafusionx-backend:1.0.0",
-    "ghcr.io/lynn-lee/datafusionx-frontend:1.0.0"
+    "ghcr.io/lynn-lee/datafusionx-backend:1.1.0",
+    "ghcr.io/lynn-lee/datafusionx-frontend:1.1.0"
   ],
   "product": "datafusionx",
   "schema": 1,
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
