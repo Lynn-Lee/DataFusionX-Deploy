@@ -1,17 +1,20 @@
 global:
-  version: "1.1.2"
+  version: "2.0"
   publicUrl: "http://datafusionx.example.com"
 
 image:
-  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.1.2"
-  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.1.2"
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:2.0"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:2.0"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
 secrets:
   postgresPassword: "change-me"
-  jwtSecretKey: "change-me-at-least-32-bytes"
-  encryptionSecretKey: "change-me-at-least-32-bytes"
+  # 必须替换：使用 openssl rand -base64 48 生成
+  jwtSecretKey: ""
+  jwtSecretKeyCurrent: ""
+  jwtSecretKeyPrevious: ""
+  encryptionSecretKey: ""
   licensePublicKey: ""
   licenseCustomerId: ""
   licenseDeploymentId: "change-me-stable-deployment-id"
@@ -73,8 +76,18 @@ postgres:
   image: "postgres:16"
   storage: "20Gi"
 
+externalPostgres:
+  enabled: false
+  host: ""
+  port: 5432
+  database: "datafusionx"
+  username: "datafusionx"
+  passwordSecret: ""
+  passwordSecretKey: "POSTGRES_PASSWORD"
+
 redis:
   image: "redis:7-alpine"
+  storage: "5Gi"
 
 backend:
   replicas: 1

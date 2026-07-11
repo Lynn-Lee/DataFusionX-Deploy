@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 安装部署指南
 
-当前发布版本：`1.1.2`
+当前发布版本：`2.0`
 
 本文面向首次部署 DataFusionX Enterprise 的系统管理员和运维人员。按本文顺序执行，可以完成部署包获取、配置、Docker Compose 或 Helm 部署、首次登录、授权激活和基础验收。
 
@@ -72,7 +72,7 @@ Kubernetes 部署需要：
 可用下面命令生成随机密钥：
 
 ```bash
-openssl rand -base64 32
+openssl rand -base64 48
 ```
 
 ## 4. 获取部署包
@@ -87,17 +87,17 @@ cd DataFusionX-Deploy
 也可以下载固定版本压缩包：
 
 ```bash
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.2/DataFusionX-Enterprise-v1.1.2.tar.gz
-curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v1.1.2/DataFusionX-Enterprise-v1.1.2.tar.gz.sha256
-shasum -a 256 -c DataFusionX-Enterprise-v1.1.2.tar.gz.sha256
-tar -xzf DataFusionX-Enterprise-v1.1.2.tar.gz
-cd DataFusionX-Enterprise-v1.1.2
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v2.0/DataFusionX-Enterprise-v2.0.tar.gz
+curl -LO https://github.com/Lynn-Lee/DataFusionX-Deploy/raw/main/releases/v2.0/DataFusionX-Enterprise-v2.0.tar.gz.sha256
+shasum -a 256 -c DataFusionX-Enterprise-v2.0.tar.gz.sha256
+tar -xzf DataFusionX-Enterprise-v2.0.tar.gz
+cd DataFusionX-Enterprise-v2.0
 ```
 
 如果系统没有 `shasum`，可使用：
 
 ```bash
-sha256sum -c DataFusionX-Enterprise-v1.1.2.tar.gz.sha256
+sha256sum -c DataFusionX-Enterprise-v2.0.tar.gz.sha256
 ```
 
 发布包内主要文件：
@@ -124,19 +124,22 @@ chmod 600 .env
 
 | 配置项 | 必填 | 说明 |
 | --- | --- | --- |
-| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `1.1.2`。 |
+| `DATAFUSIONX_VERSION` | 是 | 当前部署版本，默认 `2.0`。 |
 | `DATAFUSIONX_BACKEND_IMAGE` | 是 | 后端 / Worker / Beat 固定版本镜像。 |
 | `DATAFUSIONX_FRONTEND_IMAGE` | 是 | 前端固定版本镜像。 |
 | `DATAFUSIONX_PUBLIC_URL` | 是 | 用户浏览器访问控制台的最终地址，例如 `https://datafusionx.example.com`。 |
 | `POSTGRES_PASSWORD` | 是 | 元数据库密码。 |
-| `JWT_SECRET_KEY` | 是 | 登录 token 签名密钥，至少 32 字节。 |
+| `JWT_SECRET_KEY` | 是 | 登录 token 签名密钥，至少 32 字节；配置 `JWT_SECRET_KEY_CURRENT` 时作为兼容回退。 |
+| `JWT_SECRET_KEY_CURRENT` | 否 | JWT 轮换期间用于签发新 token，至少 32 字节。 |
+| `JWT_SECRET_KEY_PREVIOUS` | 否 | JWT 轮换期间用于验证旧 token，旧 token 过期后清空。 |
 | `ENCRYPTION_SECRET_KEY` | 是 | 连接凭据加密密钥，至少 32 字节。 |
 | `DEFAULT_ADMIN_USERNAME` | 是 | 初始管理员账号，默认 `admin`。 |
 | `DEFAULT_ADMIN_PASSWORD` | 是 | 初始管理员密码，生产必须替换。 |
 | `LICENSE_PUBLIC_KEY` | 是 | 使用授权验签公钥。 |
 | `LICENSE_CUSTOMER_ID` | 是 | 客户 ID。 |
 | `LICENSE_DEPLOYMENT_ID` | 是 | 稳定部署 ID，生成后长期保持不变。 |
-| `COMMERCIAL_INTEGRITY_PUBLIC_KEY` | 是 | 商业发布包完整性验签公钥。 |
+| `LICENSE_TRIAL_DAYS` | 是 | 初次部署自动生成的试用授权期限，默认 `180` 天。 |
+| `COMMERCIAL_INTEGRITY_PUBLIC_KEY` | 是 | 用户部署包完整性验签公钥。 |
 
 `LICENSE_DEPLOYMENT_ID` 是部署指纹计算的一部分，随意变更会导致授权需要重新签发或迁移。建议用企业内唯一且稳定的值，例如 `customer-prod-datafusionx-001`，不要写真实机密或服务器地址。
 
@@ -162,6 +165,7 @@ KAFKA_BOOTSTRAP_SERVERS=kafka01:9092,kafka02:9092,kafka03:9092
 | Flink SQL Gateway | `.env` 的 `FLINK_SQL_GATEWAY_URL` | DataFusionX Enterprise 提交 CDC、Batch 和 SQL 作业的入口。 |
 | Flink REST | `.env` 的 `FLINK_REST_URL` | 运行中心刷新 Flink Job 状态、异常、指标和 checkpoint 的入口。 |
 | 平台级 Kafka 健康检查 | `.env` 的 `KAFKA_BOOTSTRAP_SERVERS` | 只用于依赖健康检查，可留空。 |
+| 私网端点探测开关 | `.env` 的 `ALLOW_PRIVATE_NETWORK_ENDPOINTS` | 生产环境必须保持 `false`，避免连接探测被用作内网端口扫描；仅本地单机演示或隔离测试可临时开启。 |
 | CDC 任务 Kafka 消费 | 控制台 CDC 任务表单 | 每个 CDC 任务填写 Kafka Bootstrap Servers、Topic、消息格式和消费起点。 |
 | Flink Connector / JDBC Driver | 客户 Flink 集群插件目录或集群镜像 | Kafka、JDBC、StarRocks 等 connector jar 由 Flink 管理员安装。 |
 | MinIO / S3 checkpoint | 客户 Flink 集群配置 | S3/MinIO 插件、checkpoint、savepoint 和 HA storage 由客户 Flink 集群维护。 |
@@ -285,8 +289,8 @@ DEFAULT_ADMIN_PASSWORD
 如果服务器无法访问 GHCR，请先在可联网机器下载或由交付方提供镜像 tar，然后传到目标服务器：
 
 ```bash
-docker load -i datafusionx-backend-commercial-1.1.2.tar
-docker load -i datafusionx-frontend-commercial-1.1.2.tar
+docker load -i datafusionx-backend-commercial-2.0.tar
+docker load -i datafusionx-frontend-commercial-2.0.tar
 docker images | grep datafusionx
 ```
 
@@ -311,21 +315,41 @@ cp helm/datafusionx-commercial/values.yaml values-prod.yaml
 
 ```yaml
 global:
-  version: "1.1.2"
+  version: "2.0"
   publicUrl: "https://datafusionx.example.com"
 image:
-  backend: "ghcr.io/lynn-lee/datafusionx-backend:1.1.2"
-  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:1.1.2"
+  backend: "ghcr.io/lynn-lee/datafusionx-backend:2.0"
+  frontend: "ghcr.io/lynn-lee/datafusionx-frontend:2.0"
 secrets:
   postgresPassword: "<数据库密码>"
   jwtSecretKey: "<至少 32 字节 JWT 密钥>"
+  jwtSecretKeyCurrent: "<可选，JWT 轮换期间的新密钥>"
+  jwtSecretKeyPrevious: "<可选，JWT 轮换期间的上一把密钥>"
   encryptionSecretKey: "<至少 32 字节加密密钥>"
   licensePublicKey: "<使用授权公钥>"
   licenseCustomerId: "<客户 ID>"
   licenseDeploymentId: "<稳定部署 ID>"
-  commercialIntegrityPublicKey: "<商业发布包验签公钥>"
+  commercialIntegrityPublicKey: "<用户部署包验签公钥>"
 auth:
   ssoRedirectUrl: "https://datafusionx.example.com/oauth/callback"
+```
+
+默认 Chart 会部署单实例内置 PostgreSQL。生产 HA 场景可改用客户已有 PostgreSQL 集群：先在目标 namespace 创建只包含元数据库密码的 Secret，再启用 `externalPostgres`。启用后，Chart 不再创建内置 PostgreSQL Deployment、Service 和 PVC。
+
+```bash
+kubectl create secret generic datafusionx-external-postgres \
+  --from-literal=POSTGRES_PASSWORD='<数据库密码>'
+```
+
+```yaml
+externalPostgres:
+  enabled: true
+  host: "postgres-ha.example.internal"
+  port: 5432
+  database: "datafusionx"
+  username: "datafusionx"
+  passwordSecret: "datafusionx-external-postgres"
+  passwordSecretKey: "POSTGRES_PASSWORD"
 ```
 
 渲染检查：
@@ -382,7 +406,7 @@ DEFAULT_ADMIN_USERNAME='<管理员账号>' DEFAULT_ADMIN_PASSWORD='<新管理员
 控制台内检查：
 
 - 系统健康页面无异常组件。
-- 授权状态有效或仍处于试用期内。
+- 授权状态有效或仍处于 180 天试用期内。
 - 创建测试项目成功。
 - 添加源端和目标端连接成功。
 - 连接连通性检查可执行。

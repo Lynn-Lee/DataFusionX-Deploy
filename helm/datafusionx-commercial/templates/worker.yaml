@@ -30,10 +30,19 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{ if .Values.externalPostgres.enabled }}
+                  name: {{ required "externalPostgres.passwordSecret is required when externalPostgres.enabled=true" .Values.externalPostgres.passwordSecret | quote }}
+                  key: {{ .Values.externalPostgres.passwordSecretKey | quote }}
+                  {{ else }}
                   name: {{ include "datafusionx-commercial.fullname" . }}-secret
                   key: POSTGRES_PASSWORD
+                  {{ end }}
             - name: DATABASE_URL
+              {{ if .Values.externalPostgres.enabled }}
+              value: {{ printf "postgresql+asyncpg://%s:$(POSTGRES_PASSWORD)@%s:%v/%s" (required "externalPostgres.username is required when externalPostgres.enabled=true" .Values.externalPostgres.username) (required "externalPostgres.host is required when externalPostgres.enabled=true" .Values.externalPostgres.host) .Values.externalPostgres.port (required "externalPostgres.database is required when externalPostgres.enabled=true" .Values.externalPostgres.database) | quote }}
+              {{ else }}
               value: postgresql+asyncpg://datafusionx:$(POSTGRES_PASSWORD)@{{ include "datafusionx-commercial.fullname" . }}-postgres:5432/datafusionx
+              {{ end }}
             - name: REDIS_URL
               value: redis://{{ include "datafusionx-commercial.fullname" . }}-redis:6379/0
           volumeMounts:
@@ -76,10 +85,19 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{ if .Values.externalPostgres.enabled }}
+                  name: {{ required "externalPostgres.passwordSecret is required when externalPostgres.enabled=true" .Values.externalPostgres.passwordSecret | quote }}
+                  key: {{ .Values.externalPostgres.passwordSecretKey | quote }}
+                  {{ else }}
                   name: {{ include "datafusionx-commercial.fullname" . }}-secret
                   key: POSTGRES_PASSWORD
+                  {{ end }}
             - name: DATABASE_URL
+              {{ if .Values.externalPostgres.enabled }}
+              value: {{ printf "postgresql+asyncpg://%s:$(POSTGRES_PASSWORD)@%s:%v/%s" (required "externalPostgres.username is required when externalPostgres.enabled=true" .Values.externalPostgres.username) (required "externalPostgres.host is required when externalPostgres.enabled=true" .Values.externalPostgres.host) .Values.externalPostgres.port (required "externalPostgres.database is required when externalPostgres.enabled=true" .Values.externalPostgres.database) | quote }}
+              {{ else }}
               value: postgresql+asyncpg://datafusionx:$(POSTGRES_PASSWORD)@{{ include "datafusionx-commercial.fullname" . }}-postgres:5432/datafusionx
+              {{ end }}
             - name: REDIS_URL
               value: redis://{{ include "datafusionx-commercial.fullname" . }}-redis:6379/0
           volumeMounts:
@@ -122,10 +140,19 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{ if .Values.externalPostgres.enabled }}
+                  name: {{ required "externalPostgres.passwordSecret is required when externalPostgres.enabled=true" .Values.externalPostgres.passwordSecret | quote }}
+                  key: {{ .Values.externalPostgres.passwordSecretKey | quote }}
+                  {{ else }}
                   name: {{ include "datafusionx-commercial.fullname" . }}-secret
                   key: POSTGRES_PASSWORD
+                  {{ end }}
             - name: DATABASE_URL
+              {{ if .Values.externalPostgres.enabled }}
+              value: {{ printf "postgresql+asyncpg://%s:$(POSTGRES_PASSWORD)@%s:%v/%s" (required "externalPostgres.username is required when externalPostgres.enabled=true" .Values.externalPostgres.username) (required "externalPostgres.host is required when externalPostgres.enabled=true" .Values.externalPostgres.host) .Values.externalPostgres.port (required "externalPostgres.database is required when externalPostgres.enabled=true" .Values.externalPostgres.database) | quote }}
+              {{ else }}
               value: postgresql+asyncpg://datafusionx:$(POSTGRES_PASSWORD)@{{ include "datafusionx-commercial.fullname" . }}-postgres:5432/datafusionx
+              {{ end }}
             - name: REDIS_URL
               value: redis://{{ include "datafusionx-commercial.fullname" . }}-redis:6379/0
           volumeMounts:

@@ -36,7 +36,7 @@ fi
 if [[ -f "${ROOT_DIR}/release-manifest.json" && -f "${ROOT_DIR}/release-manifest.sig" ]]; then
   manifest_public_key="$(grep '^COMMERCIAL_INTEGRITY_PUBLIC_KEY=' "${ENV_FILE}" | cut -d= -f2- || true)"
   if [[ -n "${manifest_public_key}" ]]; then
-    log "校验商业 release manifest。"
+    log "校验用户部署 release manifest。"
     python3 "${ROOT_DIR}/tools/commercial-manifest.py" verify-release \
       --package-dir "${ROOT_DIR}" \
       --public-key "${manifest_public_key}"
@@ -59,7 +59,7 @@ elif [[ "${SKIP_BACKUP}" != "1" ]]; then
 fi
 
 if [[ "${SKIP_PULL}" != "1" ]]; then
-  log "拉取固定版本商业镜像。"
+  log "拉取固定版本用户部署镜像。"
   docker compose -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" pull
 fi
 

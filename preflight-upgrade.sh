@@ -159,7 +159,7 @@ check_fixed_image() {
   local forbidden_tag="latest"
   value="$(env_value "${key}")"
   if [[ -z "${value}" ]]; then
-    fail "${key} 不能为空，商业升级必须显式固定镜像。"
+    fail "${key} 不能为空，用户部署升级必须显式固定镜像。"
   fi
   if [[ "${value}" == *":${forbidden_tag}" || "${value}" != *":"* ]]; then
     fail "${key} 必须使用固定版本标签，不能使用 latest 或无标签镜像：${value}"
@@ -284,10 +284,12 @@ fi
 mkdir -p "${BACKUP_DIR}"
 chmod 700 "${BACKUP_DIR}"
 
-log "检查商业部署关键环境变量。"
+log "检查用户部署关键环境变量。"
 require_env_value DATAFUSIONX_VERSION
 require_env_value POSTGRES_PASSWORD
-require_env_value JWT_SECRET_KEY
+if ! grep -Eq '^JWT_SECRET_KEY_CURRENT=.+$' "${ENV_FILE}"; then
+  require_env_value JWT_SECRET_KEY
+fi
 require_env_value ENCRYPTION_SECRET_KEY
 require_env_value DEFAULT_ADMIN_PASSWORD
 require_env_value LICENSE_PUBLIC_KEY
@@ -314,7 +316,7 @@ compose config > "${BACKUP_DIR}/compose.rendered.yml"
 compose ps > "${BACKUP_DIR}/compose.ps.before.txt" 2> "${BACKUP_DIR}/compose.ps.before.err" || true
 
 if [[ -f "${ROOT_DIR}/release-manifest.json" && -f "${ROOT_DIR}/release-manifest.sig" ]]; then
-  log "校验商业 release manifest。"
+  log "校验用户部署 release manifest。"
   python3 "${ROOT_DIR}/tools/commercial-manifest.py" verify-release \
     --package-dir "${ROOT_DIR}" \
     --public-key "$(env_value COMMERCIAL_INTEGRITY_PUBLIC_KEY)"

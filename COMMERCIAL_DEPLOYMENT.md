@@ -2,7 +2,7 @@
 
 > 文档状态：L1 商业私有化部署方案。本文面向客户、实施和运维团队，说明 DataFusionX Enterprise 在企业内网、测试环境、预生产和生产环境中的推荐部署方式、交付内容、上线检查和运维边界。
 
-DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的数据同步控制台。私有化部署包只包含固定版本商业镜像引用、Docker Compose 编排、Helm Chart、环境变量模板、校验工具、升级回滚脚本、用户文档和截图材料，不交付后端源码、前端源码、构建私钥、授权中心源码或客户专属授权。
+DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的数据同步控制台。私有化部署包只包含固定版本用户部署镜像引用、Docker Compose 编排、Helm Chart、环境变量模板、校验工具、升级回滚脚本、用户文档和截图材料，不交付后端源码、前端源码、构建私钥、授权中心源码或客户专属授权。
 
 ## 1. 部署目标
 
@@ -97,6 +97,8 @@ cp .env.example .env
 DATAFUSIONX_PUBLIC_URL
 POSTGRES_PASSWORD
 JWT_SECRET_KEY
+JWT_SECRET_KEY_CURRENT（可选，JWT 轮换时优先用于签发新 token）
+JWT_SECRET_KEY_PREVIOUS（可选，JWT 轮换时用于验证旧 token）
 ENCRYPTION_SECRET_KEY
 DEFAULT_ADMIN_PASSWORD
 LICENSE_PUBLIC_KEY
@@ -154,13 +156,33 @@ image:
 secrets:
   postgresPassword: "<数据库密码>"
   jwtSecretKey: "<至少 32 字节 JWT 密钥>"
+  jwtSecretKeyCurrent: "<可选，JWT 轮换期间的新密钥>"
+  jwtSecretKeyPrevious: "<可选，JWT 轮换期间的上一把密钥>"
   encryptionSecretKey: "<至少 32 字节加密密钥>"
   licensePublicKey: "<使用授权公钥>"
   licenseCustomerId: "<客户 ID>"
   licenseDeploymentId: "<稳定部署 ID>"
-  commercialIntegrityPublicKey: "<商业发布包验签公钥>"
+  commercialIntegrityPublicKey: "<用户部署包验签公钥>"
 auth:
   ssoRedirectUrl: "https://datafusionx.example.com/oauth/callback"
+```
+
+默认 Chart 会部署单实例内置 PostgreSQL。生产 HA 场景可改用客户已有 PostgreSQL 集群：先在目标 namespace 创建只包含元数据库密码的 Secret，再启用 `externalPostgres`。启用后，Chart 不再创建内置 PostgreSQL Deployment、Service 和 PVC。
+
+```bash
+kubectl create secret generic datafusionx-external-postgres \
+  --from-literal=POSTGRES_PASSWORD='<数据库密码>'
+```
+
+```yaml
+externalPostgres:
+  enabled: true
+  host: "postgres-ha.example.internal"
+  port: 5432
+  database: "datafusionx"
+  username: "datafusionx"
+  passwordSecret: "datafusionx-external-postgres"
+  passwordSecretKey: "POSTGRES_PASSWORD"
 ```
 
 部署前先渲染检查：
@@ -170,7 +192,7 @@ helm template datafusionx ./helm/datafusionx-commercial -f values-prod.yaml >/tm
 helm upgrade --install datafusionx ./helm/datafusionx-commercial -f values-prod.yaml
 ```
 
-生产环境建议接入客户已有 Secret、Ingress、存储、镜像仓库、日志采集和监控系统。Chart 默认提供 PostgreSQL、Redis、Backend、Frontend、Celery Worker、Celery Beat 和授权文件 PVC；如使用托管 PostgreSQL / Redis，可基于 values 调整。
+生产环境建议接入客户已有 Secret、Ingress、存储、镜像仓库、日志采集和监控系统。Chart 默认提供 PostgreSQL、Redis、Backend、Frontend、Celery Worker、Celery Beat 和授权文件 PVC；如使用外部 PostgreSQL，数据库 HA、备份、故障切换、连接池、监控和升级由客户数据库平台负责。
 
 ## 7. 发布包校验
 
@@ -185,7 +207,7 @@ shasum -a 256 -c DataFusionX-Enterprise-v<version>.tar.gz.sha256
 ```bash
 python tools/commercial-manifest.py verify-release \
   --package-dir . \
-  --public-key <商业发布验签公钥>
+  --public-key <用户部署发布验签公钥>
 ```
 
 正式发布记录中建议留存：
@@ -198,7 +220,7 @@ python tools/commercial-manifest.py verify-release \
 
 ## 8. 使用授权
 
-部署完成后，DataFusionX Enterprise 支持试用授权，试用期内可以完整体验产品能力。如果试用期结束后仍希望继续使用，或希望扩大到更多用户、更多实例、长期生产环境、离线环境或正式商业场景，请联系作者 Lynn-Lee 获取继续使用授权。
+部署完成后，DataFusionX Enterprise 支持 180 天试用授权，试用期内可以完整体验产品能力。如果 180 天试用期结束后仍希望继续使用，或希望扩大到更多用户、更多实例、长期生产环境、离线环境或正式商业场景，请联系作者 Lynn-Lee 获取继续使用授权。
 
 授权详情见 `LEGAL-NOTICE.md`。
 
@@ -245,7 +267,7 @@ python tools/commercial-manifest.py verify-release \
 - backend、celery-worker、cdc-guard-worker 运行正常。
 - 单节点部署中 celery-beat 运行正常；多节点部署中只有主调度节点运行 celery-beat。
 - 系统管理员可以登录。
-- 授权状态有效或仍处于试用期内。
+- 授权状态有效或仍处于 180 天试用期内。
 - 默认管理员密码已修改。
 
 ### 10.4 产品使用
@@ -274,7 +296,7 @@ python tools/commercial-manifest.py verify-release \
 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upgrade.sh
 ```
 
-脚本会检查固定版本镜像、关键环境变量、Compose 配置、商业 release manifest、PostgreSQL 元数据库备份、授权数据卷备份、运行中任务、Alembic 当前版本、健康检查和授权状态。检查通过后会输出 `backups/preflight-<时间戳>/` 备份目录。
+脚本会检查固定版本镜像、关键环境变量、Compose 配置、用户部署 release manifest、PostgreSQL 元数据库备份、授权数据卷备份、运行中任务、Alembic 当前版本、健康检查和授权状态。检查通过后会输出 `backups/preflight-<时间戳>/` 备份目录。
 
 升级：
 
@@ -304,4 +326,4 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./verify-license.sh
 
 ## 13. 公开发布源头
 
-DataFusionX Enterprise 私有源码仓库是唯一研发、构建、签名和发布源头。正式 tag 或显式手动发布时，商业发布流程会生成部署包并同步到 `Lynn-Lee/DataFusionX-Deploy`。公开部署仓库只保存用户部署入口、用户文档、校验工具、固定版本镜像引用和历史版本压缩包，不保存源码、私钥、真实授权文件、激活码、客户部署指纹、授权中心 token、现场 runbook、真实拓扑或 sourcemap。
+DataFusionX Enterprise 私有源码仓库是唯一研发、构建、签名和发布源头。正式 tag 或显式手动发布时，用户部署发布流程会生成部署包并同步到 `Lynn-Lee/DataFusionX-Deploy`。公开部署仓库只保存用户部署入口、用户文档、校验工具、固定版本镜像引用和历史版本压缩包，不保存源码、私钥、真实授权文件、激活码、客户部署指纹、授权中心 token、现场 runbook、真实拓扑或 sourcemap。

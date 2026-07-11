@@ -46,7 +46,7 @@ def load_public_key(value: str) -> Ed25519PublicKey:
 
 
 def generate_keypair() -> None:
-    """生成商业发布 manifest 签名密钥对。"""
+    """生成用户部署发布 manifest 签名密钥对。"""
     private_key = Ed25519PrivateKey.generate()
     public_key = private_key.public_key()
     private_raw = private_key.private_bytes(
@@ -68,7 +68,7 @@ def build_release_manifest(
     images: list[str],
     release_source: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    """根据商业部署包内容生成 release manifest。"""
+    """根据用户部署包内容生成 release manifest。"""
     files = []
     for path in sorted(package_dir.rglob("*")):
         if not path.is_file():
@@ -107,7 +107,7 @@ def sign_release(
     images: list[str],
     release_source: dict[str, str] | None = None,
 ) -> None:
-    """签名商业部署包 release manifest。"""
+    """签名用户部署包 release manifest。"""
     manifest = build_release_manifest(package_dir, version, images, release_source=release_source)
     manifest_path = package_dir / "release-manifest.json"
     signature_path = package_dir / "release-manifest.sig"
@@ -142,7 +142,7 @@ def verify_release(package_dir: Path, public_key_value: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="DataFusionX Enterprise 商业发布 manifest 工具")
+    parser = argparse.ArgumentParser(description="DataFusionX Enterprise 用户部署发布 manifest 工具")
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("generate-keypair")
 

@@ -1,6 +1,6 @@
 # DataFusionX Enterprise 运维与升级指南
 
-当前发布版本：`1.1.2`
+当前发布版本：`2.0`
 
 本文面向负责 DataFusionX Enterprise 日常运维、升级、备份、回滚和故障排查的管理员。所有命令默认在部署目录执行，也就是包含 `.env`、`deploy/docker-compose.yml`、`preflight-upgrade.sh`、`upgrade.sh` 和 `rollback.sh` 的目录。
 
@@ -120,10 +120,10 @@ DEFAULT_ADMIN_USERNAME='<管理员账号>' DEFAULT_ADMIN_PASSWORD='<管理员密
 
 脚本会检查和执行：
 
-- 商业部署关键环境变量是否仍为 `change-me`。
+- 用户部署关键环境变量是否仍为 `change-me`。
 - 后端和前端镜像是否使用固定版本标签。
 - Docker Compose 配置是否可渲染。
-- 商业 release manifest 签名是否可校验。
+- 用户部署 release manifest 签名是否可校验。
 - PostgreSQL 元数据库备份。
 - License volume 备份。
 - 当前运行中任务数量。
@@ -146,9 +146,9 @@ ALLOW_RUNNING_TASKS=1 DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./preflight-upg
 升级前编辑 `.env`，把版本和镜像引用改成目标版本：
 
 ```text
-DATAFUSIONX_VERSION=1.1.2
-DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:1.1.2
-DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:1.1.2
+DATAFUSIONX_VERSION=2.0
+DATAFUSIONX_BACKEND_IMAGE=ghcr.io/lynn-lee/datafusionx-backend:2.0
+DATAFUSIONX_FRONTEND_IMAGE=ghcr.io/lynn-lee/datafusionx-frontend:2.0
 ```
 
 生产环境必须使用固定版本标签，不要使用 `latest` 或无标签镜像。
@@ -161,7 +161,7 @@ DEFAULT_ADMIN_PASSWORD='<管理员密码>' ./upgrade.sh
 
 脚本会按顺序执行：
 
-1. 校验商业 release manifest。
+1. 校验用户部署 release manifest。
 2. 调用 `preflight-upgrade.sh` 做升级前检查和备份。
 3. 拉取固定版本镜像。
 4. 执行 `backend alembic upgrade head`。
@@ -206,7 +206,7 @@ DEFAULT_ADMIN_USERNAME='<管理员账号>' DEFAULT_ADMIN_PASSWORD='<新管理员
 
 - 登录成功。
 - 系统健康正常。
-- 授权状态有效或仍处于试用期内。
+- 授权状态有效或仍处于 180 天试用期内。
 - 项目列表、连接管理、任务同步、SQL 作业、调度视图、运行中心、诊断中心可打开。
 - 最近一条运行记录可查看日志和详情。
 - 告警通知测试可发送。

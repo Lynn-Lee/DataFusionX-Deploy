@@ -19,8 +19,22 @@ spec:
       containers:
         - name: redis
           image: {{ .Values.redis.image | quote }}
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --save
+            - "60"
+            - "1000"
           ports:
             - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: {{ include "datafusionx-commercial.fullname" . }}-redis
 ---
 apiVersion: v1
 kind: Service

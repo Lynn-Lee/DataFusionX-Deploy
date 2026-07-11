@@ -1,3 +1,4 @@
+{{- if not .Values.externalPostgres.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -10,6 +11,20 @@ spec:
   resources:
     requests:
       storage: {{ .Values.postgres.storage | quote }}
+---
+{{ end }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "datafusionx-commercial.fullname" . }}-redis
+  labels:
+    {{- include "datafusionx-commercial.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.storage | quote }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

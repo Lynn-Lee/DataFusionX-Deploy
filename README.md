@@ -2,7 +2,7 @@
 
 DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是用户下载、部署和升级 DataFusionX Enterprise 的公开入口，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和功能截图。
 
-当前发布版本：`1.1.2`
+当前发布版本：`2.0`
 
 ## 项目定位
 
@@ -39,6 +39,8 @@ cp .env.example .env
 ```text
 POSTGRES_PASSWORD
 JWT_SECRET_KEY
+JWT_SECRET_KEY_CURRENT（可选，JWT 轮换时使用）
+JWT_SECRET_KEY_PREVIOUS（可选，JWT 轮换时使用）
 ENCRYPTION_SECRET_KEY
 DEFAULT_ADMIN_PASSWORD
 LICENSE_PUBLIC_KEY
@@ -51,13 +53,13 @@ DATAFUSIONX_PUBLIC_URL
 可用下面命令快速生成密钥值：
 
 ```bash
-openssl rand -base64 32
+openssl rand -base64 48
 ```
 
 启动前确认没有遗留占位值：
 
 ```bash
-grep -nE 'change-me|^LICENSE_PUBLIC_KEY=$|^LICENSE_CUSTOMER_ID=$|^COMMERCIAL_INTEGRITY_PUBLIC_KEY=$' .env
+grep -nE 'change-me|^JWT_SECRET_KEY=$|^ENCRYPTION_SECRET_KEY=$|^LICENSE_PUBLIC_KEY=$|^LICENSE_CUSTOMER_ID=$|^COMMERCIAL_INTEGRITY_PUBLIC_KEY=$' .env
 ```
 
 上面命令没有输出，才继续启动：
@@ -121,17 +123,17 @@ curl -fsS http://localhost:18000/api/v1/health
 
 ## 发布包校验
 
-如果下载 `releases/v1.1.2/DataFusionX-Enterprise-v1.1.2.tar.gz` 固定版本包，请先校验 sha256：
+如果下载 `releases/v2.0/DataFusionX-Enterprise-v2.0.tar.gz` 固定版本包，请先校验 sha256：
 
 ```bash
-shasum -a 256 -c releases/v1.1.2/DataFusionX-Enterprise-v1.1.2.tar.gz.sha256
+shasum -a 256 -c releases/v2.0/DataFusionX-Enterprise-v2.0.tar.gz.sha256
 ```
 
 正式发布包内会随版本生成 `release-manifest.json` 和 `release-manifest.sig`，用于发布流程和交付归档校验。文档或截图单独更新时不应手工伪造重签发布 manifest。
 
 ## 镜像
 
-- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:1.1.2`
-- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:1.1.2`
+- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:2.0`
+- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:2.0`
 
 生产环境不要使用 `latest`，请保留 `.env.example`、Docker Compose 和 Helm values 中的明确版本标签。

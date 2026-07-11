@@ -31,12 +31,12 @@ if [[ -f "${ROOT_DIR}/release-manifest.json" && -f "${ROOT_DIR}/release-manifest
     public_key="$(grep '^COMMERCIAL_INTEGRITY_PUBLIC_KEY=' "${ROOT_DIR}/.env" | cut -d= -f2- || true)"
   fi
   if [[ -n "${public_key}" ]]; then
-    log "校验商业 release manifest。"
+    log "校验用户部署 release manifest。"
     python3 "${ROOT_DIR}/tools/commercial-manifest.py" verify-release \
       --package-dir "${ROOT_DIR}" \
       --public-key "${public_key}"
   else
-    log "未提供商业发布验签公钥，跳过 release manifest 校验。"
+    log "未提供用户部署发布验签公钥，跳过 release manifest 校验。"
   fi
 fi
 
