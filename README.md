@@ -84,7 +84,7 @@ curl -fsS http://localhost:18000/api/v1/health
 - [安装部署指南](INSTALLATION.md)：从环境准备、`.env` 配置、Docker Compose / Helm 部署到首次登录验证。
 - [产品使用手册](USER_GUIDE.md)：从系统初始化到项目、连接、任务、审批、调度、运行中心和投产检查。
 - [运维升级指南](OPERATIONS_UPGRADE.md)：日常巡检、日志、备份、升级、回滚和故障排查。
-- [私有化部署方案](COMMERCIAL_DEPLOYMENT.md)：部署形态、交付内容、上线检查和安全边界。
+- [部署方案与边界](COMMERCIAL_DEPLOYMENT.md)：部署形态选择、交付内容、上线检查、控制面/数据面边界和安全约束。
 - [使用授权](LEGAL-NOTICE.md)：试用和继续使用授权说明。
 
 ## 核心功能截图

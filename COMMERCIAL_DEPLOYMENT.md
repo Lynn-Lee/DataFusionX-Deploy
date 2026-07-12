@@ -1,6 +1,6 @@
-# DataFusionX Enterprise 私有化部署方案
+# DataFusionX Enterprise 部署方案与边界
 
-> 文档状态：L1 商业私有化部署方案。本文面向客户、实施和运维团队，说明 DataFusionX Enterprise 在企业内网、测试环境、预生产和生产环境中的推荐部署方式、交付内容、上线检查和运维边界。
+> 文档状态：L1 部署方案与边界说明。本文面向客户、实施和运维团队，说明 DataFusionX Enterprise 在企业内网、测试环境、预生产和生产环境中的推荐部署形态、交付内容、上线检查、控制面/数据面边界和安全约束。具体安装命令、`.env` 配置和首次登录验证见 `INSTALLATION.md`。
 
 DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的数据同步控制台。私有化部署包只包含固定版本用户部署镜像引用、Docker Compose 编排、Helm Chart、环境变量模板、校验工具、升级回滚脚本、用户文档和截图材料，不交付后端源码、前端源码、构建私钥、授权中心源码或客户专属授权。
 
@@ -245,7 +245,7 @@ python tools/commercial-manifest.py verify-release \
 
 ### 10.1 部署前
 
-- 已阅读 `INSTALLATION.md` 和本私有化部署方案。
+- 已阅读 `INSTALLATION.md` 和本部署方案与边界说明。
 - 已准备 Docker Compose 或 Kubernetes / Helm 环境。
 - 已确认服务器可以拉取固定版本镜像，或已导入离线镜像。
 - 已复制 `.env.example` 为 `.env` 并替换所有 `change-me` 值。

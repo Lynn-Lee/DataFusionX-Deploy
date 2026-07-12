@@ -9,13 +9,13 @@
     },
     {
       "path": "COMMERCIAL_DEPLOYMENT.md",
-      "sha256": "9d3e2f6b9d73ebb012a8e749e0a50bf01cd2f018bace6457a3a389852fcd266c",
-      "size": 14249
+      "sha256": "c6fee942bb37bbeb0a3592a2a8feffcfc6c6808b362596cf2d6f561828ffc94e",
+      "size": 14362
     },
     {
       "path": "INSTALLATION.md",
-      "sha256": "1722b86b921e14d4268ea332813bb58b5d9b8e0cd873b4d4cdf468f6dcd264c9",
-      "size": 17594
+      "sha256": "dbfc6b02b551af73e84e1db3efd9c6c990b8d6ce59b77aa127037a7c4ad3eacc",
+      "size": 17628
     },
     {
       "path": "LEGAL-NOTICE.md",
@@ -29,8 +29,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "aea17b8aa6b184644a41ee722edcf53486340d62dae83838d22f21ddda0e9d94",
-      "size": 6183
+      "sha256": "2ed099b297332e748fa25472060aff8e7fb678258cff7bd578c60b126bb3cd9b",
+      "size": 6217
     },
     {
       "path": "USER_GUIDE.md",
@@ -39,7 +39,7 @@
     },
     {
       "path": "checksums.txt",
-      "sha256": "85bc1a8acb932a582ba2e5d8cf89e3320aac9557c467d1a68f49322eb30a4a9c",
+      "sha256": "1e01d69d0600edd5c112c3a6e51255228cccfa24edf808baf7eed11af14c43c9",
       "size": 4391
     },
     {
@@ -228,7 +228,7 @@
       "size": 2878
     }
   ],
-  "generated_at": "2026-07-11T15:34:23.452187+00:00",
+  "generated_at": "2026-07-12T02:16:27.795243+00:00",
   "images": [
     "ghcr.io/lynn-lee/datafusionx-backend:2.0",
     "ghcr.io/lynn-lee/datafusionx-frontend:2.0"
@@ -236,12 +236,12 @@
   "product": "datafusionx",
   "releaseSource": {
     "buildActor": "Lynn-Lee",
-    "buildCommit": "d18a05e6f881fcc6db9d058a4b23aa11406f5b8c",
+    "buildCommit": "6bb8698055a7143975756cff250aed0a3d67e58f",
     "buildRef": "refs/heads/main",
-    "buildRunId": "29157454241",
-    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/29157454241",
-    "giteeSha": "d18a05e6f881fcc6db9d058a4b23aa11406f5b8c",
-    "originSha": "d18a05e6f881fcc6db9d058a4b23aa11406f5b8c"
+    "buildRunId": "29176050569",
+    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/29176050569",
+    "giteeSha": "6bb8698055a7143975756cff250aed0a3d67e58f",
+    "originSha": "6bb8698055a7143975756cff250aed0a3d67e58f"
   },
   "schema": 1,
   "version": "2.0"

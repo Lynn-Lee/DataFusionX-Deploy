@@ -431,5 +431,5 @@ DEFAULT_ADMIN_USERNAME='<管理员账号>' DEFAULT_ADMIN_PASSWORD='<新管理员
 
 - [产品使用手册](USER_GUIDE.md)：完成项目、连接、任务、审批、调度和投产检查。
 - [运维与升级指南](OPERATIONS_UPGRADE.md)：配置日常巡检、备份、升级和回滚流程。
-- [私有化部署方案](COMMERCIAL_DEPLOYMENT.md)：查看部署形态、交付内容和投产检查清单。
+- [部署方案与边界](COMMERCIAL_DEPLOYMENT.md)：查看部署形态选择、交付内容、控制面/数据面边界和投产检查清单。
 - [使用授权](LEGAL-NOTICE.md)：了解试用授权和继续使用授权方式。
