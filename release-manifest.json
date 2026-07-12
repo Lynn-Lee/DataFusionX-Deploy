@@ -39,7 +39,7 @@
     },
     {
       "path": "checksums.txt",
-      "sha256": "1e01d69d0600edd5c112c3a6e51255228cccfa24edf808baf7eed11af14c43c9",
+      "sha256": "6687ac5b58f69831a6295c3b29d79fba5b4d28bbd983162ee7897da0ade6074c",
       "size": 4391
     },
     {
@@ -149,8 +149,8 @@
     },
     {
       "path": "screenshots/dashboard-overview.png",
-      "sha256": "c9437104cef99bf98dffcc2e75e8e3294cb3c2fd3017f6e10ef7320911da9ca1",
-      "size": 104094
+      "sha256": "91dd0fd5e50e2240905bdc4838876db26ad5c738db84595058fdd5deda740ed4",
+      "size": 306022
     },
     {
       "path": "screenshots/dashboard-trends.png",
@@ -169,8 +169,8 @@
     },
     {
       "path": "screenshots/diagnostics-overview.png",
-      "sha256": "95e17796b4fa8a0fe5403d5420a1e2ac0f1ab725a121adb5803428f4f02197a0",
-      "size": 86695
+      "sha256": "ad335e2529c79dea638764ae1371b0a4198ca1ab206949f2bd7ba5acc3fe6630",
+      "size": 293022
     },
     {
       "path": "screenshots/project-management.png",
@@ -184,18 +184,18 @@
     },
     {
       "path": "screenshots/schedule-view.png",
-      "sha256": "ae57656a5ebe19644d5c693bf73b556bea23631f1c0d8a36a0a240fa59fa2b86",
-      "size": 66319
+      "sha256": "3135bc594418a3181c371994dfab6171497f8212642dc8fc6f53eb681dd6f187",
+      "size": 326326
     },
     {
       "path": "screenshots/sql-jobs.png",
-      "sha256": "9c383f0a7d30dbea879a14abbe1c8dfbd872505b751c1e9321cfe6350f8179b6",
-      "size": 96305
+      "sha256": "27e1cc989ee6067842f7441eb701787549f2a25ed31d1689ed57d727d0387d3c",
+      "size": 331525
     },
     {
       "path": "screenshots/sync-jobs.png",
-      "sha256": "bcab66ecc86e72a75f038c36d276464645e8011099b2c6049ed3eb702275aa8b",
-      "size": 93668
+      "sha256": "fb8455bfd46ee8e7b6d111b1805120022233542c94481afd535d2f33280b4a1a",
+      "size": 369617
     },
     {
       "path": "screenshots/system-config.png",
@@ -228,7 +228,7 @@
       "size": 2878
     }
   ],
-  "generated_at": "2026-07-12T02:16:27.795243+00:00",
+  "generated_at": "2026-07-12T05:48:42.262939+00:00",
   "images": [
     "ghcr.io/lynn-lee/datafusionx-backend:2.0",
     "ghcr.io/lynn-lee/datafusionx-frontend:2.0"
@@ -236,12 +236,12 @@
   "product": "datafusionx",
   "releaseSource": {
     "buildActor": "Lynn-Lee",
-    "buildCommit": "6bb8698055a7143975756cff250aed0a3d67e58f",
+    "buildCommit": "0681aa3fbddb2ce85ecf0892e59edc6b8b615541",
     "buildRef": "refs/heads/main",
-    "buildRunId": "29176050569",
-    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/29176050569",
-    "giteeSha": "6bb8698055a7143975756cff250aed0a3d67e58f",
-    "originSha": "6bb8698055a7143975756cff250aed0a3d67e58f"
+    "buildRunId": "29181157829",
+    "buildRunUrl": "https://github.com/Lynn-Lee/DataFusionX-Enterprise/actions/runs/29181157829",
+    "giteeSha": "0681aa3fbddb2ce85ecf0892e59edc6b8b615541",
+    "originSha": "0681aa3fbddb2ce85ecf0892e59edc6b8b615541"
   },
   "schema": 1,
   "version": "2.0"
