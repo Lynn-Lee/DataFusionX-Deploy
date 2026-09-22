@@ -2,7 +2,7 @@
 
 DataFusionX Enterprise 是面向企业 IT、DBA、数据开发和运维团队的私有化数据同步控制台。本仓库是用户下载、部署和升级 DataFusionX Enterprise 的公开入口，包含固定版本部署编排、Helm Chart、校验工具、运维脚本、产品文档和功能截图。
 
-当前发布版本：`3.0`
+当前发布版本：`3.0.1`
 
 ## 项目定位
 
@@ -123,17 +123,17 @@ curl -fsS http://localhost:18000/api/v1/health
 
 ## 发布包校验
 
-如果下载 `releases/v3.0/DataFusionX-Enterprise-v3.0.tar.gz` 固定版本包，请先校验 sha256：
+如果下载 `releases/v3.0.1/DataFusionX-Enterprise-v3.0.1.tar.gz` 固定版本包，请先校验 sha256：
 
 ```bash
-shasum -a 256 -c releases/v3.0/DataFusionX-Enterprise-v3.0.tar.gz.sha256
+shasum -a 256 -c releases/v3.0.1/DataFusionX-Enterprise-v3.0.1.tar.gz.sha256
 ```
 
 正式发布包内会随版本生成 `release-manifest.json` 和 `release-manifest.sig`，用于发布流程和交付归档校验。文档或截图单独更新时不应手工伪造重签发布 manifest。
 
 ## 镜像
 
-- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:3.0`
-- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:3.0`
+- 后端 / Worker / Beat：`ghcr.io/lynn-lee/datafusionx-backend:3.0.1`
+- 前端：`ghcr.io/lynn-lee/datafusionx-frontend:3.0.1`
 
 生产环境不要使用 `latest`，请保留 `.env.example`、Docker Compose 和 Helm values 中的明确版本标签。
